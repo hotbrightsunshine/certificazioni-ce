@@ -1,5 +1,5 @@
 import dotenv
-import os
+import os 
 import psycopg2
 
 def get_secret_key():
@@ -29,3 +29,16 @@ def is_user(name:str, passw:str):
     f = query(f"SELECT * FROM users WHERE utenteinterno='{name}' AND"
               f" password='{passw}'")
     return len(f) >= 1
+
+def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
+        demo_query = f"""insert into ddt (
+        datacertificazione,
+        supplier,
+        ddtfornitorenumero,
+        ddtfornitoredata )
+        values (
+        {date}', '{fornitore}',
+        {numddt}, '{dataddt}' );"""
+        
+        query(demo_query)
+        return True

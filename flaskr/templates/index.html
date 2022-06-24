@@ -2,11 +2,12 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-    {% if login %}
-        <p>Benvenuto {{ username }}.</p>
-        <a href=" {{ url_for('logout') }} ">Logout</a>
+{% if login %}
+
+<p>Benvenuto {{ username }}.</p>
+        <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
         <hr>
-        <a href=" {{ url_for('ddt') }} ">Compila un nuovo DDT</a>
+        <a href=" {{ url_for('ddt') }} " class="btn btn-primary">Compila un nuovo DDT</a>
     {% else %}
         <form action="{{ url_for('login') }}">
             <button type="submit">Login</button>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import is_user, get_secret_key
+from db import is_user, get_secret_key, register_ddt
 
 
 ## Flask App initialization
@@ -40,6 +40,21 @@ def index():
     login = session.get('login')
     return render_template('index.html', username = username, login = login)
 
-@app.route("/ddt")
+@app.route("/ddt", methods=["POST", "GET"])
 def ddt():
-    return render_template("ddt_compile.html")
+    error = None
+    if request.method =="POST":
+        datacert = request.form["datacert"]
+        username = session.get("username")
+        numero = request.form["numero"]
+        date = request.form["date"]
+
+        if register_ddt(
+                datacert,
+                username,
+                numero,
+                date):
+            return redirect('index.html')
+        else:
+            error = "An error occurred while processing data. "
+    return render_template("ddt_compile.html", error=error)

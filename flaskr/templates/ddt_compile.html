@@ -2,7 +2,24 @@
 {% block title %}Compila DDT{% endblock %}
 
 {% block content %}
-<form action="url_for('articoli')">
-
+<form method="post">
+  <div class="input-group mb-3">
+  <span class="input-group-text" id="inputGroup-sizing-default">Data Certificazione</span>
+  <input id="datacert" name="datacert" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="inputGroup-sizing-default">Numero DDT</span>
+  <input id="numero" name="numero" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="inputGroup-sizing-default">Data DDT</span>
+  <input id="date" name="date" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+</div>
+{% if error %}
+  <p class="red">{{error}}</p>
+{% endif %}
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Invia dati</button>
+  </div>
 </form>
 {% endblock %}
