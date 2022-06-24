@@ -1,21 +1,22 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import is_user, get_secret_key, register_ddt, query, is_logget
+from db import is_user, get_secret_key, register_ddt, query, is_logged
+from record_to_dict import get_ddts
 
 
 ## Flask App initialization
 app = Flask(__name__)
 app.secret_key = get_secret_key()
 
+#@app.context_processor
+#def inject_stage_and_region():
+#    return dict(login=is_logged(session), username=get_username(session))
 
-## Setting up sessions
-app.config.from_object(__name__)
 
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     fetched=None
-    alreadylogged = False
-    if session.get("login"):
+    if is_logged(session):
         return redirect(url_for("index"))
     elif request.method == "POST":
         if is_user(request.form['username'], request.form['password']):
@@ -23,7 +24,7 @@ def login():
             session['username'] = request.form['username']
             return redirect(url_for("index"))
     print(fetched)
-    return render_template('login.html', fetched=fetched, username=session.get('username'))
+    return render_template('login.html', fetched=fetched,  username=session.get('username'))
 
 
 ## Logout
@@ -34,17 +35,21 @@ def logout():
     return redirect(url_for('index'))
 
 
+## Index 
 @app.route("/")
 def index():
     username = session.get('username')
     login = session.get('login')
     ddtlist = query(f"SELECT * FROM ddt WHERE supplier='{username}'")
-    return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
+    ddtlist_dict = get_ddts(ddtlist)
+    return render_template('index.html', username = username, login = login, ddtlist=ddtlist_dict)
+
+## DTT Form 
 @app.route("/ddt", methods=["POST", "GET"])
 def ddt():
     error = None
-    if not is_logged(session):
-        redirect(url_for("login"))
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
     if request.method =="POST":
         datacert = request.form["datacert"]
         username = session.get("username")
@@ -55,7 +60,15 @@ def ddt():
                 username,
                 numero,
                 date):
-            return redirect(url_for('index'))
+            return redirect(url_for('articoli'))
         else:
             error = "Controlla i dati e riprova"
-    return render_template("ddt_compile.html", error=error)
+    return render_template("ddt_compile.html", error=error, logged=is_logged(session))
+
+@app.route("/articoli", methods=['GET', 'POST'])
+def articoli():
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+
+    return render_template("articoli.html")
+    

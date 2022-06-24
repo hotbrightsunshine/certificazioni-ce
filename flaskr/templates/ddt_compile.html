@@ -2,6 +2,7 @@
 {% block title %}Compila DDT{% endblock %}
 
 {% block content %}
+<h1>{{logged}}</h1>
 <form method="post">
   <div class="input-group mb-3">
   <span class="input-group-text" id="inputGroup-sizing-default">Data Certificazione</span>
@@ -22,4 +23,5 @@
     <button class="btn btn-primary" type="submit">Invia dati</button>
   </div>
 </form>
+<a class="btn btn-primary" href="{{url_for('index')}}">Ritorna alla home</a>
 {% endblock %}

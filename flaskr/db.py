@@ -3,11 +3,17 @@ import os
 import psycopg2
 
 def is_logged(session):
-    if session['login']:
-        return True
-    else:
+    try:
+        return session['login'] == 'ok'
+    except:
         return False
 
+def get_username(session):
+    if is_logged(session):
+        return session['username']
+    else:
+        return None
+    
 def get_secret_key():
     print(os.getenv("SECRET"))
     return os.getenv("SECRET")
