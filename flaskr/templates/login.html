@@ -1,8 +1,7 @@
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
+{% extends "layout/father.html" %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
     <form method="POST">
         <label for="username">Username: </label>
         <input type="text" id="username" name="username">
@@ -24,5 +23,4 @@
         <p style="color:green">Sei già loggato come {{username}}.</p>
         {% endif %}
     </form>
-</body>
-</html>
+{% endblock %}

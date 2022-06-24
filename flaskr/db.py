@@ -2,6 +2,10 @@ import dotenv
 import os
 import psycopg2
 
+def get_secret_key():
+    print(os.getenv("SECRET"))
+    return os.getenv("SECRET")
+
 def get_db_connection():
     dotenv.load_dotenv("../.env")
     conn = psycopg2.connect(

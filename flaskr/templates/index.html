@@ -1,30 +1,15 @@
+{% extends "layout/father.html" %}
+{% block title %}Index{% endblock %}
 
-{% if login %}
-<form action="{{url_for('logout')}}">
-    <p>Benvenuto {{ username }}.</p>
-    <button type="submit">Logout</button>
-</form>
-<hr>
-<h1>Form Documento di Trasporto</h1>
-
-<form method="POST" action="{{url_for('index')}}">
-    <label for="datacertificazione">Data Certificazione: </label>
-    <input type="text" id="datacertificazione" name="datacertificazione">
-    <br>
-    <label for="supplier">Fornitore: </label>
-    <input type="text" id="supplier" name="supplier" disabled value="you">
-    <br>
-    <label for="numerobolla">Numero DDT: </label>
-    <input type="text" id="numerobolla" name="numerobolla">
-    <br>
-    <label for="databolla">Data DDT: </label>
-    <input type="text" id="databolla" name="databolla" disabled value="oggi">
-    <br>
-    <button type="submit">Invia</button>
-</form>
-
-{% else %}
-<form action="{{url_for('login')}}">
-    <button type="submit">Login</button>
-</form>
-{% endif %}
+{% block content %}
+    {% if login %}
+        <p>Benvenuto {{ username }}.</p>
+        <a href=" {{ url_for('logout') }} ">Logout</a>
+        <hr>
+        <a href=" {{ url_for('ddt') }} ">Compila un nuovo DDT</a>
+    {% else %}
+        <form action="{{ url_for('login') }}">
+            <button type="submit">Login</button>
+        </form>
+    {% endif %}
+{% endblock %}
