@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <form method="POST">
+        <label for="username">Username: </label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="password">Password: </label>
+        <input type="password" id="password" name="password">
+        <br>
+        <button type="submit">Invia dati</button>
+
+        {% if fetched %}
+            <p>OK</p>
+        {% endif %}
+
+        {% if error %}
+            <p style="color:red">{{ error }}</p>
+        {% endif %}
+
+        {% if alreadylogged %}
+        <p style="color:green">Sei già loggato come {{username}}.</p>
+        {% endif %}
+    </form>
+</body>
+</html>
