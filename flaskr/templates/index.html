@@ -8,9 +8,14 @@
         <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
         <hr>
         <a href=" {{ url_for('ddt') }} " class="btn btn-primary">Compila un nuovo DDT</a>
+        <hr>
+        <h1>I tuoi DDT</h1>
+        {% for ddt in ddtlist %}
+        <p>{{ddt}}</p>
+        {% endfor %}
     {% else %}
         <form action="{{ url_for('login') }}">
             <button type="submit">Login</button>
         </form>
-    {% endif %}
+{% endif %}
 {% endblock %}

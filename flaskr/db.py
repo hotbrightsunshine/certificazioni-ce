@@ -2,6 +2,12 @@ import dotenv
 import os 
 import psycopg2
 
+def is_logged(session):
+    if session['login']:
+        return True
+    else:
+        return False
+
 def get_secret_key():
     print(os.getenv("SECRET"))
     return os.getenv("SECRET")
@@ -14,6 +20,7 @@ def get_db_connection():
         user=os.getenv("DB_USERNAME"),
         password=os.getenv("DB_PASSWORD")
     )
+    conn.autocommit = True
     return conn
 
 def query(q:str):
@@ -24,6 +31,14 @@ def query(q:str):
     cur.close()
     conn.close()
     return fetched
+
+def execute(q:str):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(q)
+    cur.close()
+    conn.close()
+
 
 def is_user(name:str, passw:str):
     f = query(f"SELECT * FROM users WHERE utenteinterno='{name}' AND"
@@ -37,8 +52,10 @@ def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
         ddtfornitorenumero,
         ddtfornitoredata )
         values (
-        {date}', '{fornitore}',
+        '{date}', '{fornitore}',
         {numddt}, '{dataddt}' );"""
-        
-        query(demo_query)
-        return True
+        try:
+            execute(demo_query)
+            return True
+        except:
+            return False

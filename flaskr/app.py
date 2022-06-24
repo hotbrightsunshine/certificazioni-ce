@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import is_user, get_secret_key, register_ddt
+from db import is_user, get_secret_key, register_ddt, query, is_logget
 
 
 ## Flask App initialization
@@ -38,23 +38,24 @@ def logout():
 def index():
     username = session.get('username')
     login = session.get('login')
-    return render_template('index.html', username = username, login = login)
-
+    ddtlist = query(f"SELECT * FROM ddt WHERE supplier='{username}'")
+    return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
 @app.route("/ddt", methods=["POST", "GET"])
 def ddt():
     error = None
+    if not is_logged(session):
+        redirect(url_for("login"))
     if request.method =="POST":
         datacert = request.form["datacert"]
         username = session.get("username")
         numero = request.form["numero"]
         date = request.form["date"]
-
         if register_ddt(
                 datacert,
                 username,
                 numero,
                 date):
-            return redirect('index.html')
+            return redirect(url_for('index'))
         else:
-            error = "An error occurred while processing data. "
+            error = "Controlla i dati e riprova"
     return render_template("ddt_compile.html", error=error)
