@@ -21,16 +21,12 @@
                 <a class="nav-link" href="{{url_for('index')}}">Pagina principale</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{url_for('ddt')}}"> DDT </a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link" href="{{url_for('articoli')}}"> Articoli </a>
+                <a class="nav-link" href="{{url_for('newddt')}}"> DDT </a>
               </li>
 </ul>
 
             <span class="navbar-text">
-              {% if get_login() %}
+              {% if login %}
               Sei autenticato come {{ username }},
               <a href="url_for('logout')">Logout</a>.
               {% endif %}
@@ -38,8 +34,7 @@
           </div>
         </div>
       </nav>
-      
-      <h1>{{ self.title() }} - Itab</h1>
+     
       {% block content %}
       {% endblock %}
       <hr>

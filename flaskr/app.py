@@ -7,6 +7,8 @@ from record_to_dict import get_ddts
 app = Flask(__name__)
 app.secret_key = get_secret_key()
 
+app.jinja_env.globals['login'] = is_logged(session)
+
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -33,9 +35,11 @@ def logout():
 ## Index 
 @app.route("/ddts")
 def index():
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
     username = session.get('username')
     login = session.get('login')
-    ddtlist = query(f"SELECT * FROM ddt WHERE supplier='{username}'")
+    ddtlist = query(f"SELECT * FROM testpython.cefddt0f WHERE cedtidus='{username}'")
     ddtlist_dict = get_ddts(ddtlist)
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist_dict)
 

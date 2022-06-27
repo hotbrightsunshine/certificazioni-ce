@@ -1,4 +1,4 @@
-import pypyodbc
+import pyodbc 
 import dotenv
 import os 
 
@@ -9,6 +9,8 @@ def is_logged(session):
     except:
         return False
 
+
+    
 def get_username(session):
     if is_logged(session):
         return session['username']
@@ -20,8 +22,9 @@ def get_secret_key():
     return os.getenv("SECRET")
 
 def get_db_connection():
-    connection = pypyodbc.conect(driver='{iSeries Access ODBC Driver}',
-                                 system='192.168.110.5',uid='teststage',pwd="teststage")
+    print(pyodbc.drivers())
+    cnxn = pyodbc.connect('DRIVER={IBM i Access ODBC Driver};SYSTEM=lf;UID='+ os.getenv("DB_USERNAME") +';PWD='+os.getenv("DB_PASSWORD")+';')
+    return cnxn
     
     
 def query(q:str):
@@ -35,28 +38,29 @@ def query(q:str):
 
 def execute(q:str):
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute(q)
-    cur.close()
+    conn.execute(q)
+    conn.commit()
     conn.close()
 
 
 def is_user(name:str, passw:str):
-    f = query(f"SELECT * FROM users WHERE utenteinterno='{name}' AND"
-              f" password='{passw}'")
+    f = query(f"SELECT * FROM testpython.cefusr0f WHERE ceusid='{name}' AND"
+              f" ceuspwd='{passw}'")
     return len(f) >= 1
 
 def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
-        demo_query = f"""insert into ddt (
-        datacertificazione,
-        supplier,
-        ddtfornitorenumero,
-        ddtfornitoredata )
+        demo_query = f"""insert into testpython.cefddt0f (
+        cedtcedt,
+        cedtidus,
+        cedtddtnr,
+        cedtddtdt,
+        cedtata)
         values (
         '{date}', '{fornitore}',
-        {numddt}, '{dataddt}' );"""
-        try:
-            execute(demo_query)
-            return True
-        except:
-            return False
+        '{numddt}', '{dataddt}', ' ' )"""
+        
+        print(demo_query)
+        execute(demo_query)
+        
+        
+        
