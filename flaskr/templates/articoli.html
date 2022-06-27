@@ -6,55 +6,68 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-8 col-sm-12">
-      <!-- Lista di articoli -->
+      <div class="row">
+        {% for art in articoli %}
+        <div class="col">
+          {{art}}
+        </div>
+        {% endfor %}
+      </div>
     </div>
     <div class="col-lg-4 col-sm-12">
       <!-- Form per inserimento -->
 
       <h2>Inserisci un nuovo articolo</h2>
 
-      <form method="post">
+      <form method="POST">
 
         <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Codice Interno</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          <span class="input-group-text">Codice Interno</span>
+          <input type="text" class="form-control" id="codice-interno" name="codice-interno">
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          <span class="input-group-text">Quantità</span>
+          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="quantita" name="quantita">
         </div>
-        <div class="input-group mb-3">
-          <input type="file" class="form-control" id="inputGroupFile02">
-          <label class="input-group-text" for="inputGroupFile02">Carica</label>
+        <!--        <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="file">
+                    <label class="input-group-text" for="inputGroupFile02">Carica</label>
         </div>
-
+        -->
         <div class="row">
           <div class="col-sm-6">
 
             Lavorazione con... 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" value="" id="punzonatura" name="punzonatura">
               <label class="form-check-label" for="flexCheckDefault">
                 Punzonatura
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" value="" id="taglio" name="taglio">
               <label class="form-check-label" for="flexCheckDefault">
                 Taglio
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" value="" id="piegatura" name="piegatura">
               <label class="form-check-label" for="flexCheckDefault">
                 Piegatura
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" value="" id="foratura" name="foratura">
+              <label class="form-check-label" for="flexCheckDefault">
+                Foratura
+              </label>
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="saldatura" name="saldatura">
               <label class="form-check-label" for="flexCheckDefault">
                 Saldatura
               </label>
@@ -65,26 +78,26 @@
 
             Conforme a...
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi">
               <label class="form-check-label" for="flexCheckDefault">
                 Controlli visivi
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali" name="controlli-dimensionali">
               <label class="form-check-label" for="flexCheckDefault">
                 Controlli dimensionali
               </label>
             </div>
 
           </div>
- 
+          
         </div>
-<div class="row">
-        <button type="submit" class="btn btn-primary" href="">Aggiungi</button>
-      </div>
-      
+        <div class="row">
+          <button type="submit" class="btn btn-primary" href="">Aggiungi</button>
+        </div>
+        
       </form>      
       
     </div>

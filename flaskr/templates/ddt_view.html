@@ -1,0 +1,48 @@
+{% extends "layout/father.html" %}
+{% block title %} DDT n. {{ddt['numero']}} {% endblock%}
+{% block content %}
+<br>
+<h1>DDT n. {{ddt['numero']}}</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Campo</th>
+      <th scope="col">Valore</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">ID</th>
+      <td>{{ddt['id']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Data Certificazione</th>
+      <td>{{ddt['datacertificazione']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Fornitore</th>
+
+      <td>{{ddt['fornitore']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Numero DDT</th>
+      <td>{{ddt['numero']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Data DDT</th>
+      <td>{{ddt['data']}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-around">
+
+    <a class="btn btn-primary" href="">Torna indietro</a>
+    <a class="btn btn-danger" href="">Elimina DDT</a>
+    <a class="btn btn-primary" href="">Modifica DDT</a>
+    <a class="btn btn-primary" href="{{url_for('articoli', ddtnum=ddt['id'])}}">Aggiungi articoli</a>
+
+</div>
+
+{% endblock %}

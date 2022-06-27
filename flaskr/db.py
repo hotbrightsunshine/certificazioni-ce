@@ -2,6 +2,7 @@ import pyodbc
 import dotenv
 import os 
 
+from record_to_dict import get_ddts, get_ddt
 
 def is_logged(session):
     try:
@@ -64,5 +65,25 @@ def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
             return True
         except:
             return False
-        
-        
+
+
+def get_ddt_of_username(username:str, num=None):
+    if num == None:
+        ddtlist = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}'")
+
+        return get_ddts(ddtlist)
+    else:
+        ddt = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}' AND CEDTID={num} ")
+        print(ddt)
+        return get_ddt(ddt[0])
+
+def get_articles_with_ddt_number(num:int):
+    articoli = query(f"SELECT * FROM testpython.cefart0f WHERE cearddtid = '{num}'")
+    print("OOO", articoli)
+    return get_ddts(articoli)
+
+def insert_article (ddt, codice_interno, quantita, filedic, punzonatura, piegatura, taglio, foratura, saldatura, controlli_visivi, controlli_dimensionali):
+    
+    q = f"INSERT INTO testpython.cefart0f (cearddtid, cearcdpa, cearqty, cearpunz, ceartagl, cearfora, cearpieg, cearsald, cearctdi, cearctvi, cearfile, cearata) VALUES ( '{ddt}', '{codice_interno}', {quantita}, {punzonatura}, {taglio}, {foratura}, {piegatura}, {saldatura}, {controlli_visivi}, {controlli_dimensionali}, ' ', ' ')"
+    
+    execute(q)

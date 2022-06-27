@@ -1,16 +1,21 @@
 def get_ddt(ddt):
+
     dict_ddt = {
-        'id' : ddt[0],
+        'id' : int(ddt[0]),
         'datacertificazione' : ddt[1],
-        'numero' : ddt[2],
-        'data' : ddt[3],
-        'stato' : ddt[4],
-        'fornitore' : ddt[5]
+        'fornitore' : ddt[2],
+        'numero' : ddt[3],
+        'data' : ddt[4],
+        'stato' : ddt[5]
     }
+
+
+
     return dict_ddt
 
-def get_ddts(ddt):
+def get_ddts(ddts):
     ddtlist = []
-    for i in ddt:
-        ddtlist.append(get_ddt(i))
+    for ddt in ddts:
+        print(ddt)
+        ddtlist.append(get_ddt(ddt))
     return ddtlist
