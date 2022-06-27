@@ -1,6 +1,7 @@
+import pypyodbc
 import dotenv
 import os 
-import psycopg2
+
 
 def is_logged(session):
     try:
@@ -19,16 +20,10 @@ def get_secret_key():
     return os.getenv("SECRET")
 
 def get_db_connection():
-    dotenv.load_dotenv("../.env")
-    conn = psycopg2.connect(
-        host="192.168.110.161",
-        database="itab",
-        user=os.getenv("DB_USERNAME"),
-        password=os.getenv("DB_PASSWORD")
-    )
-    conn.autocommit = True
-    return conn
-
+    connection = pypyodbc.conect(driver='{iSeries Access ODBC Driver}',
+                                 system='192.168.110.5',uid='teststage',pwd="teststage")
+    
+    
 def query(q:str):
     conn = get_db_connection()
     cur = conn.cursor()

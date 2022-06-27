@@ -7,11 +7,6 @@ from record_to_dict import get_ddts
 app = Flask(__name__)
 app.secret_key = get_secret_key()
 
-#@app.context_processor
-#def inject_stage_and_region():
-#    return dict(login=is_logged(session), username=get_username(session))
-
-
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -36,7 +31,7 @@ def logout():
 
 
 ## Index 
-@app.route("/")
+@app.route("/ddts")
 def index():
     username = session.get('username')
     login = session.get('login')
@@ -45,8 +40,8 @@ def index():
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist_dict)
 
 ## DTT Form 
-@app.route("/ddt", methods=["POST", "GET"])
-def ddt():
+@app.route("/newddt", methods=["POST", "GET"])
+def newddt():
     error = None
     if is_logged(session) == False:
         return redirect(url_for("login"))
@@ -65,10 +60,18 @@ def ddt():
             error = "Controlla i dati e riprova"
     return render_template("ddt_compile.html", error=error, logged=is_logged(session))
 
-@app.route("/articoli", methods=['GET', 'POST'])
-def articoli():
+@app.route("/ddt/<int:ddtnum>")
+def ddt(ddtnum:int):
+    if is_logged(session) == False:
+        return redirect("login")
+    #if ddt then show ddt
+    #else return 404
+
+@app.route("/ddt/<int:ddtum>/articles", methods=['GET', 'POST'])
+def articoli(ddtnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
 
+    #return articoli of ddtnum and username
     return render_template("articoli.html")
     
