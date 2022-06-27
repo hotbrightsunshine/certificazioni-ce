@@ -4,24 +4,31 @@
 {% block content %}
 {% if login %}
 
-<p>Benvenuto {{ username }}.</p>
-        <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
-        <hr>
-        <a href=" {{ url_for('newddt') }} " class="btn btn-primary">Compila un nuovo DDT</a>
-        <hr>
 
-        <!-- DDT List-->
-        <h1>I tuoi DDT</h1>
-        <div class="container">
-          {% for ddt in ddtlist %}
-          <div class="border border-dark row">
-            <div class="col-md-10 col-sm-12"> <p>{{ddt}}</p> </div>
-            <div class="col-md-1 col-sm-12"><a class="btn btn-danger" href="">Elimina</a></div>
-            <div class="col-md-1 col-sm-12"><a class="btn btn-primary" href="">Modifica</a></div>
-          </div>
-          {% endfor %}
-        </div>
-        {% else %}
-        <a class="btn btn-primary" href="{{url_for('login')}}">Login</a>
+
+
+
+<br>
+<div class="row">
+  <div class="col-md-10 col-sm-12">
+    <h1>I tuoi DDT</h1>
+  </div>
+  <div class="col-md-2 col-sm-12">
+    <a href=" {{ url_for('newddt') }} " class="btn btn-primary">Compila un nuovo DDT</a>
+  </div>
+</div>
+
+
+<!-- DDT List-->
+
+<div class="container">
+  {% for ddt in ddtlist %}
+  <div class="border border-dark row">
+    <div class="col-md-10 col-sm-12"> <p>{{ddt}}</p> </div>
+    <div class="col-md-1 col-sm-12"><a class="btn btn-danger" href="">Elimina</a></div>
+    <div class="col-md-1 col-sm-12"><a class="btn btn-primary" href="">Modifica</a></div>
+  </div>
+  {% endfor %}
+</div>
 {% endif %} 
 {% endblock %}

@@ -59,7 +59,7 @@ def newddt():
                 username,
                 numero,
                 date):
-            return redirect(url_for('articoli'))
+            return redirect(url_for('index'))
         else:
             error = "Controlla i dati e riprova"
     return render_template("ddt_compile.html", error=error, logged=is_logged(session))
@@ -79,3 +79,5 @@ def articoli(ddtnum:int):
     #return articoli of ddtnum and username
     return render_template("articoli.html")
     
+if __name__ == '__main__':
+    app.run(host='192.168.219.129', port=5000, debug=True, threaded=False)

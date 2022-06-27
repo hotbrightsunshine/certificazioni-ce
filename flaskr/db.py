@@ -58,9 +58,11 @@ def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
         values (
         '{date}', '{fornitore}',
         '{numddt}', '{dataddt}', ' ' )"""
-        
-        print(demo_query)
-        execute(demo_query)
-        
+        try: 
+            print(demo_query)
+            execute(demo_query)
+            return True
+        except:
+            return False
         
         
