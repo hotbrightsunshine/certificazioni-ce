@@ -1,0 +1,13 @@
+{% extends "layout/father.html" %}
+{% block content %}
+<h1>Articolo n. {{artnum}} del DDT n. {{ddtnum}}</h1>
+
+{% if lavorazioni == [] %}
+<h3>Non ci sono lavorazioni</h3>
+<a class="btn btn-primary" href="{{url_for('newlavorazione', artnum = artnum, ddtnum = ddtnum)}}">Aggiungi una nuova lavorazione</a>
+{% else %}
+{% for lavorazione in lavorazioni %}
+<p>{{lavorazione}}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}

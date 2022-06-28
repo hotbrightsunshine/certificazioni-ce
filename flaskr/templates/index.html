@@ -14,7 +14,7 @@
     <h1>I tuoi DDT</h1>
   </div>
   <div class="col-md-2 col-sm-12">
-    <a href=" {{ url_for('newddt') }} " class="btn btn-primary">Compila un nuovo DDT</a>
+    <a href=" {{ url_for('newddt') }} " class="btn btn-success">Compila un nuovo DDT</a>
   </div>
 </div>
 
@@ -25,7 +25,7 @@
   {% for ddt in ddtlist %}
   <div class="border p-3 row m-3 rounded">
     <div class="col-md-8 col-sm-12"> <p>{{ddt}}</p> </div>
-    <div class="col-md-2 col-sm-12"><a class="btn btn-danger" href="">Elimina</a></div>
+    <div class="col-md-2 col-sm-12"><a class="btn btn-danger" href="{{url_for('removeddt', ddtnum=ddt['id'])}}">Elimina</a></div>
     <div class="col-md-2 col-sm-12"><a class="btn btn-primary" href="{{url_for('ddt', ddtnum=ddt['id'])}}">Modifica</a></div>
   </div>
   {% endfor %}

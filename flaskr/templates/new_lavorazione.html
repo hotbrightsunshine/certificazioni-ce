@@ -1,0 +1,81 @@
+{% extends "layout/father.html" %}
+{% block content %}
+<h1>Aggiungi una nuova lavorazione</h1>
+<form id="form">
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura" onclick="toggleHide('punzonatura')">
+    <label class="form-check-label" for="flexCheckDefault">
+      Punzonatura
+    </label>
+  </div>
+  {% if can_saldatura %}
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura" onclick="toggleHide('saldatura')">
+    <label class="form-check-label" for="flexCheckDefault">
+      Saldatura
+    </label>
+  </div>
+  {% endif %}
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura" onclick="toggleHide('piegatura')">
+    <label class="form-check-label" for="flexCheckDefault">
+      Piegatura
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Taglio" onclick="toggleHide('taglio')">
+    <label class="form-check-label" for="flexCheckDefault">
+      Taglio
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura" onclick="toggleHide('foratura')">
+    <label class="form-check-label" for="flexCheckDefault">
+      Foratura
+    </label>
+  </div>
+  
+
+  <div id="punzonatura" class="row border m-3 p-3 form">
+    <h3>Punzonatura</h3>
+  </div>
+  {% if can_saldatura %}
+  <div id="saldatura" class="row border m-3 p-3 form">
+    <h3>Saldatura</h3>
+  </div>
+  {% endif %}
+  <div id="piegatura" class="row border m-3 p-3 form">
+    <h3>Piegatura</h3>
+  </div>
+  <div id="taglio" class="row border m-3 p-3 form">
+    <h3>Taglio</h3>
+  </div>
+  <div id="foratura" class="row border m-3 p-3 form">
+    <h3>Foratura</h3>
+  </div>
+  
+</form>
+{% endblock %}
+{% block js %}
+
+<script>
+  function wipe(){
+      $("div.form").addClass("d-none")
+  }
+
+  window.onload = wipe()
+
+  function toggleHide(attr){
+      console.log("ecco")
+      if($("#"+attr).hasClass("d-none")){
+          $("#"+attr).removeClass("d-none")
+      }
+      else
+          $("#"+attr).addClass("d-none")
+  }
+
+  console.log("ciao")
+</script>
+
+{% endblock %}
+

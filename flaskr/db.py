@@ -78,14 +78,18 @@ def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
 
 def get_ddt_of_username(username:str, num=None):
     if num == None:
-        ddtlist = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}'")
+        ddtlist = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}' AND cedtata=' '")
 
         return get_ddts(ddtlist)
     else:
-        ddt = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}' AND CEDTID={num} ")
+        ddt = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}' AND CEDTID={num} AND cedtata=' ' ")
         
         return get_ddt(ddt[0])
 
+def remove_ddt(num:int):
+    q = f"update testpython.cefddt0f set cedtata='r' where cedtid={num}"
+    execute(q)
+    
 def get_articolo(art):
     return {
         'id': int(art[0]),
@@ -167,3 +171,19 @@ def insert_article (ddt, codice_interno, quantita, filedic, punzonatura, piegatu
     q = f"INSERT INTO testpython.cefart0f (cearddtid, cearcdpa, cearqty, cearpunz, ceartagl, cearfora, cearpieg, cearsald, cearctdi, cearctvi, cearfile, cearata) VALUES ( '{ddt}', '{codice_interno}', {quantita}, {punzonatura}, {taglio}, {foratura}, {piegatura}, {saldatura}, {controlli_visivi}, {controlli_dimensionali}, ' ', ' ')"
     
     execute(q)
+
+
+def get_equipaggiamenti_of_user(username:str):
+    q = f"select * from testpython. where ='{username}'"
+    return query(q)
+
+
+def get_soggetti_of_user(username:str):
+    q = f"select * from testpython.cefsog0f where cefgcdfo='{username}'"
+
+    
+def can_saldatura(username:str):
+    try:
+        return len(get_soggetti_of_user(username)) > 0
+    except:
+        return False

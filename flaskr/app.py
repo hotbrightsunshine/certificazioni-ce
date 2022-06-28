@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import is_user, get_secret_key, register_ddt, query, is_logged, get_ddt_of_username, get_articles_with_ddt_number, insert_article, is_ce, get_article_and_insert_it
+from db import is_user, get_secret_key, register_ddt, query, is_logged, get_ddt_of_username, get_articles_with_ddt_number, insert_article, is_ce, get_article_and_insert_it, can_saldatura, remove_ddt
 from record_to_dict import get_ddts
 
 
@@ -70,6 +70,10 @@ def newddt():
             error = "Controlla i dati e riprova"
     return render_template("ddt_compile.html", error=error, logged=is_logged(session))
 
+@app.route("/ddt/<int:ddtnum>/delete", methods=['POST', 'GET'])
+def removeddt(ddtnum:int):
+    remove_ddt(ddtnum)
+    return redirect(url_for('index'))
 
 @app.route("/ddt/<int:ddtnum>")
 def ddt(ddtnum:int):
@@ -105,6 +109,7 @@ def newarticolo(ddtnum:int):
     
     return render_template("new_article.html", ddtnum = ddtnum)
 
+
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>")
 def articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
@@ -112,11 +117,14 @@ def articolo(ddtnum:int, artnum:int):
     lavorazioni = []
     return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, lavorazioni = lavorazioni)
 
+
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/newlavorazione")
 def newlavorazione(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
-    return render_template("new_lavorazione.html", artnum = artnum, ddtnum = ddtnum)
+    
+    return render_template("new_lavorazione.html", artnum = artnum, ddtnum = ddtnum, can_saldatura = can_saldatura(session['username']))
+
 
 if __name__ == '__main__':
     app.run(host='192.168.219.129', port=5000, debug=True, threaded=False)
