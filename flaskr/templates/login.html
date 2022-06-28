@@ -2,25 +2,21 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-    <form method="POST">
-        <label for="username">Username: </label>
-        <input type="text" id="username" name="username">
-        <br>
-        <label for="password">Password: </label>
-        <input type="password" id="password" name="password">
-        <br>
-        <button type="submit">Invia dati</button>
-
-        {% if fetched %}
-            <p>OK</p>
-        {% endif %}
-
-        {% if error %}
-            <p style="color:red">{{ error }}</p>
-        {% endif %}
-
-        {% if alreadylogged %}
-        <p style="color:green">Sei già loggato come {{username}}.</p>
-        {% endif %}
-    </form>
+<form method="POST">
+  <div class="row p-3">
+    <h1>Login</h1>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">Codice Utente</span>
+    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="username">
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+    <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="password">
+  </div>
+  <button type="submit" class="btn btn-primary">Invia dati</button>
+  {% if error %}
+  <p style="color:red">{{ error }}</p>
+  {% endif %}
+</form>
 {% endblock %}

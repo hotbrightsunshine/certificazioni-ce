@@ -2,106 +2,31 @@
 {% block title %}Inserisci articoli{% endblock %}
 
 {% block content %}
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-sm-12">
-      <div class="row">
-        {% for art in articoli %}
-        <div class="col">
-          {{art}}
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    <div class="col-lg-4 col-sm-12">
-      <!-- Form per inserimento -->
-
-      <h2>Inserisci un nuovo articolo</h2>
-
-      <form method="POST">
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Codice Interno</span>
-          <input type="text" class="form-control" id="codice-interno" name="codice-interno">
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Quantità</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="quantita" name="quantita">
-        </div>
-        <!--        <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="file">
-                    <label class="input-group-text" for="inputGroupFile02">Carica</label>
-        </div>
-        -->
-        <div class="row">
-          <div class="col-sm-6">
-
-            Lavorazione con... 
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="punzonatura" name="punzonatura">
-              <label class="form-check-label" for="flexCheckDefault">
-                Punzonatura
-              </label>
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="taglio" name="taglio">
-              <label class="form-check-label" for="flexCheckDefault">
-                Taglio
-              </label>
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="piegatura" name="piegatura">
-              <label class="form-check-label" for="flexCheckDefault">
-                Piegatura
-              </label>
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="foratura" name="foratura">
-              <label class="form-check-label" for="flexCheckDefault">
-                Foratura
-              </label>
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="saldatura" name="saldatura">
-              <label class="form-check-label" for="flexCheckDefault">
-                Saldatura
-              </label>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-
-            Conforme a...
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi">
-              <label class="form-check-label" for="flexCheckDefault">
-                Controlli visivi
-              </label>
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali" name="controlli-dimensionali">
-              <label class="form-check-label" for="flexCheckDefault">
-                Controlli dimensionali
-              </label>
-            </div>
-
-          </div>
-          
-        </div>
-        <div class="row">
-          <button type="submit" class="btn btn-primary" href="">Aggiungi</button>
-        </div>
-        
-      </form>      
-      
-    </div>
+<div class="row p-3">
+  <div class="col-md-8"><h1>Articoli del DDT n. {{ddtnum}}</h1></div>
+  <div class="col-md-2">
+    <a class="btn btn-success" href="{{url_for('newarticolo', ddtnum = ddtnum)}}">Nuovo articolo</a></div>
+  <div class="col-md-2">
+    <a class="btn btn-primary" href="{{url_for('ddt', ddtnum = ddtnum)}}">Indietro</a>
   </div>
 </div>
 
-{% endblock %}
+<div class="container">
+
+  {% for art in articles %}
+  <div class="row border p-3 m-3 rounded">
+    <div class="col-md-8">
+      {{art}}
+    </div>
+    <div class="col-md-2">
+      <a class="btn btn-danger" href="">Elimina</a>
+    </div>
+    <div class="col-md-2">
+      <a class="btn btn-primary" href="{{url_for('articolo', ddtnum=ddtnum, artnum=art['id'])}}">Modifica</a>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+<div>
+  {%endblock%}

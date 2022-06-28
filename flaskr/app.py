@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import is_user, get_secret_key, register_ddt, query, is_logged, get_ddt_of_username, get_articles_with_ddt_number, insert_article
+from db import is_user, get_secret_key, register_ddt, query, is_logged, get_ddt_of_username, get_articles_with_ddt_number, insert_article, is_ce, get_article_and_insert_it
 from record_to_dict import get_ddts
 
 
@@ -7,7 +7,10 @@ from record_to_dict import get_ddts
 app = Flask(__name__)
 app.secret_key = get_secret_key()
 
+## Flask Configuration
 app.jinja_env.globals['login'] = is_logged(session)
+
+
 
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
@@ -19,11 +22,11 @@ def login():
         if is_user(request.form['username'], request.form['password']):
             session['login'] = 'ok'
             session['username'] = request.form['username']
+            session['certificazione'] = is_ce(session['username'])
             return redirect(url_for("index"))
     print(fetched)
     print(request.form)
     return render_template('login.html', fetched=fetched,  username=session.get('username'))
-
 
 ## Logout
 @app.route("/logout", methods=['POST', 'GET'])
@@ -34,7 +37,7 @@ def logout():
 
 
 ## Index 
-@app.route("/ddts")
+@app.route("/")
 def index():
     if is_logged(session) == False:
         return redirect(url_for("login"))
@@ -43,6 +46,8 @@ def index():
     print(username)
     ddtlist = get_ddt_of_username(username, None)
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
+
+
 
 ## DTT Form 
 @app.route("/newddt", methods=["POST", "GET"])
@@ -65,6 +70,7 @@ def newddt():
             error = "Controlla i dati e riprova"
     return render_template("ddt_compile.html", error=error, logged=is_logged(session))
 
+
 @app.route("/ddt/<int:ddtnum>")
 def ddt(ddtnum:int):
     if is_logged(session) == False:
@@ -74,53 +80,43 @@ def ddt(ddtnum:int):
 
     return render_template("ddt_view.html", ddt=ddt)
 
+
 @app.route("/ddt/<int:ddtnum>/articles", methods=['GET', 'POST'])
 def articoli(ddtnum:int):
+    articoli=[]
     if is_logged(session) == False:
         return redirect(url_for("login"))
+
     if request.method == 'POST':
-        print(request.form)
-        codice_interno = request.form['codice-interno']
-        quantita = request.form['quantita']
-
-        def it_or_false(req):
-            if req in request.form:
-                return True
-            else:
-                return False
-
-        punzonatura = it_or_false('punzonatura')
-        taglio = it_or_false('taglio')
-        piegatura = it_or_false('piegatura')
-        foratura = it_or_false('foratura')
-        saldatura = it_or_false('saldatura')
-        controlli_visivi = it_or_false('controlli-visivi')
-        controlli_dimensionali = it_or_false('controlli-dimensionali')
-
-        def bool_to_int(val:bool):
-            if val:
-                return 1
-            else:
-                return 0
-        
-        insert_article(
-            ddt=ddtnum,
-            filedic=" ",
-            codice_interno=codice_interno,
-            quantita=quantita,
-            punzonatura=bool_to_int(punzonatura),
-            taglio=bool_to_int(taglio),
-            piegatura=bool_to_int(piegatura),
-            foratura=bool_to_int(foratura),
-            saldatura=bool_to_int(saldatura),
-            controlli_visivi=bool_to_int(controlli_visivi),
-            controlli_dimensionali=bool_to_int(controlli_dimensionali))
+        get_article_and_insert_it(request, ddtnum)
     
+    print(request.form)
     articoli = get_articles_with_ddt_number(ddtnum)
-    print(articoli)
+    print("Articles with ddt number: ", articoli)
 #    if get_ddt_of_username(session['username'], ddtnum)
-    #return articoli of ddtnum and username
-    return render_template("articoli.html", articoli = articoli)
+    #return articoli of ddtnum and 
+    return render_template("articoli.html", articles = articoli, ddtnum=ddtnum)
+
+
+@app.route("/ddt/<int:ddtnum>/newarticle")
+def newarticolo(ddtnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
     
+    return render_template("new_article.html", ddtnum = ddtnum)
+
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>")
+def articolo(ddtnum:int, artnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    lavorazioni = []
+    return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, lavorazioni = lavorazioni)
+
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/newlavorazione")
+def newlavorazione(ddtnum:int, artnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    return render_template("new_lavorazione.html", artnum = artnum, ddtnum = ddtnum)
+
 if __name__ == '__main__':
     app.run(host='192.168.219.129', port=5000, debug=True, threaded=False)

@@ -9,7 +9,7 @@
 
 
 <br>
-<div class="row">
+<div class="row p-3">
   <div class="col-md-10 col-sm-12">
     <h1>I tuoi DDT</h1>
   </div>
@@ -23,10 +23,10 @@
 
 <div class="container">
   {% for ddt in ddtlist %}
-  <div class="border border-dark row">
-    <div class="col-md-10 col-sm-12"> <p>{{ddt}}</p> </div>
-    <div class="col-md-1 col-sm-12"><a class="btn btn-danger" href="">Elimina</a></div>
-    <div class="col-md-1 col-sm-12"><a class="btn btn-primary" href="{{url_for('ddt', ddtnum=ddt['id'])}}">Modifica</a></div>
+  <div class="border p-3 row m-3 rounded">
+    <div class="col-md-8 col-sm-12"> <p>{{ddt}}</p> </div>
+    <div class="col-md-2 col-sm-12"><a class="btn btn-danger" href="">Elimina</a></div>
+    <div class="col-md-2 col-sm-12"><a class="btn btn-primary" href="{{url_for('ddt', ddtnum=ddt['id'])}}">Modifica</a></div>
   </div>
   {% endfor %}
 </div>
