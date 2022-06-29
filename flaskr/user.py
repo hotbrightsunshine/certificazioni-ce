@@ -6,7 +6,7 @@ class User:
         return len(f) >= 1
 
     def is_ce(username):
-        q = DB.select_star("testpyhon.cefusr0f", f"ceusid = '{username}'")
+        q = DB.select_star("testpython.cefusr0f", f"ceusid = '{username}'")
         q = q[0]
         ce = q[2]
         if ce == 'C':

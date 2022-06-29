@@ -3,10 +3,10 @@ from db import DB
 class DDT:
     def get_of_username(username:str, num=None):
         if num == None:
-            q = DB.select_star(f"testpython.cefddt0f", "cedtidus='{username}' AND cedtata=' '")
+            q = DB.select_star(f"testpython.cefddt0f", f"cedtidus='{username}' AND cedtata=' '")
             return DDT.get_ddts_from_records(q)
         else:
-            q = DB.select_star(f"testpython.CEFDDT0f", "cedtidus='{username}' AND CEDTID={num} AND cedtata=' '")
+            q = DB.select_star(f"testpython.CEFDDT0f", f"cedtidus='{username}' AND CEDTID={num} AND cedtata=' '")
             return DDT.get_ddt_from_record(q[0])
 
     def remove(num:int):

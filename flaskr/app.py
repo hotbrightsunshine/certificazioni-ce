@@ -24,7 +24,7 @@ def get_username(session):
 
 ## Flask App iniprint(tialization
 app = Flask(__name__)
-app.secret_key = os.get_env("SECRET")
+app.secret_key = os.getenv("SECRET")
 
 
 ## Flask Configuration
@@ -63,7 +63,6 @@ def index():
         return redirect(url_for("login"))
     username = session.get('username')
     login = session.get('login')
-    print(username)
     ddtlist = DDT.get_of_username(username, None)
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
 
