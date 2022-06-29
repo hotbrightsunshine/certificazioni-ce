@@ -23,7 +23,6 @@ class DB:
         return cnxn
 
     def query(q:str):
-        #print("QUERY: ", q)
         conn = DB.get_connection()
         cur = conn.cursor()
         cur.execute(q)
@@ -39,6 +38,7 @@ class DB:
         for row in cursor.fetchall():
             results.append(dict(zip(columns, row)))
         print(results)
+        return results
 
 
     def execute(q:str):
@@ -50,7 +50,7 @@ class DB:
 
     def select_field(field, table, condition):
         q = f"SELECT {field} FROM {table} WHERE {condition}"
-        return DB.query(q)
+        return DB.query_dict(q)
 
     def select_star(table, condition):
         return DB.select_field("*", table, condition)

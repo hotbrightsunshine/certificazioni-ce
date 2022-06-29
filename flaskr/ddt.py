@@ -4,10 +4,10 @@ class DDT:
     def get_of_username(username:str, num=None):
         if num == None:
             q = DB.select_star(f"testpython.cefddt0f", f"cedtidus='{username}' AND cedtata=' '")
-            return DDT.get_ddts_from_records(q)
+            return q
         else:
             q = DB.select_star(f"testpython.CEFDDT0f", f"cedtidus='{username}' AND CEDTID={num} AND cedtata=' '")
-            return DDT.get_ddt_from_record(q[0])
+            return q[0]
 
     def remove(num:int):
         DB.update_field("testpython.cefddt0f", "cedtata", "'r'", f"cedtid={num}")

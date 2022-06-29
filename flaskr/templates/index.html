@@ -25,8 +25,8 @@
   {% for ddt in ddtlist %}
   <div class="border p-3 row m-3 rounded">
     <div class="col-md-8 col-sm-12"> <p>{{ddt}}</p> </div>
-    <div class="col-md-2 col-sm-12"><a class="btn btn-danger" href="{{url_for('removeddt', ddtnum=ddt['id'])}}">Elimina</a></div>
-    <div class="col-md-2 col-sm-12"><a class="btn btn-primary" href="{{url_for('ddt', ddtnum=ddt['id'])}}">Modifica</a></div>
+    <div class="col-md-2 col-sm-12"><a class="btn btn-danger" href="{{url_for('removeddt', ddtnum=ddt['CEDTID'])}}">Elimina</a></div>
+    <div class="col-md-2 col-sm-12"><a class="btn btn-primary" href="{{url_for('ddt', ddtnum=ddt['CEDTID'])}}">Modifica</a></div>
   </div>
   {% endfor %}
 </div>

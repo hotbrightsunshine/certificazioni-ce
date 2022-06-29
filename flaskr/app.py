@@ -63,7 +63,7 @@ def index():
         return redirect(url_for("login"))
     username = session.get('username')
     login = session.get('login')
-    ddtlist = DDT.get_of_username(username, None)
+    ddtlist = DDT.get_of_username(session.get('username'))
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
 
 

@@ -14,24 +14,24 @@
   <tbody>
     <tr>
       <th scope="row">ID</th>
-      <td>{{ddt['id']}}</td>
+      <td>{{ddt['CEDTID']}}</td>
     </tr>
     <tr>
       <th scope="row">Data Certificazione</th>
-      <td>{{ddt['datacertificazione']}}</td>
+      <td>{{ddt['CEDTCEDT']}}</td>
     </tr>
     <tr>
       <th scope="row">Fornitore</th>
 
-      <td>{{ddt['fornitore']}}</td>
+      <td>{{ddt['CEDTIDUS']}}</td>
     </tr>
     <tr>
       <th scope="row">Numero DDT</th>
-      <td>{{ddt['numero']}}</td>
+      <td>{{ddt['CEDTDDTNR']}}</td>
     </tr>
     <tr>
       <th scope="row">Data DDT</th>
-      <td>{{ddt['data']}}</td>
+      <td>{{ddt['CEDTDDTDT']}}</td>
     </tr>
   </tbody>
 </table>
@@ -41,7 +41,7 @@
     <a class="btn btn-primary" href="{{url_for('index')}}">Torna indietro</a>
     <a class="btn btn-danger" href="">Elimina DDT</a>
     <a class="btn btn-primary" href="">Modifica DDT</a>
-    <a class="btn btn-primary" href="{{url_for('articoli', ddtnum=ddt['id'])}}">Aggiungi articoli</a>
+    <a class="btn btn-primary" href="{{url_for('articoli', ddtnum=ddt['CEDTID'])}}">Aggiungi articoli</a>
 
 </div>
 
