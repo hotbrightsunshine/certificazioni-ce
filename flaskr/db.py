@@ -174,7 +174,7 @@ def insert_article (ddt, codice_interno, quantita, filedic, punzonatura, piegatu
 
 
 def get_equipaggiamenti_of_user(username:str):
-    q = f"select * from testpython. where ='{username}'"
+    q = f"select * from testpython.cefdev0f where cedvcdfo='{username}'"
     return query(q)
 
 
@@ -184,6 +184,6 @@ def get_soggetti_of_user(username:str):
     
 def can_saldatura(username:str):
     try:
-        return len(get_soggetti_of_user(username)) > 0
+        return len(get_soggetti_of_user(username)) > 0 and len(get_equipaggiamenti_of_user(username)) > 0
     except:
         return False

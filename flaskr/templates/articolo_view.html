@@ -1,13 +1,131 @@
+
 {% extends "layout/father.html" %}
 {% block content %}
-<h1>Articolo n. {{artnum}} del DDT n. {{ddtnum}}</h1>
 
-{% if lavorazioni == [] %}
-<h3>Non ci sono lavorazioni</h3>
-<a class="btn btn-primary" href="{{url_for('newlavorazione', artnum = artnum, ddtnum = ddtnum)}}">Aggiungi una nuova lavorazione</a>
-{% else %}
-{% for lavorazione in lavorazioni %}
-<p>{{lavorazione}}</p>
-{% endfor %}
+
+<h1>Lavorazioni</h1>
+
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura" >
+  <label class="form-check-label" for="flexCheckDefault">
+    Punzonatura
+  </label>
+</div>
+{% if can_saldatura %}
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura" onclick="toggleHide('saldatura')">
+  <label class="form-check-label" for="flexCheckDefault">
+    Saldatura
+  </label>
+</div>
 {% endif %}
-{% endblock %}
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura">
+  <label class="form-check-label" for="flexCheckDefault">
+    Piegatura
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Taglio">
+  <label class="form-check-label" for="flexCheckDefault">
+    Taglio
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura" >
+  <label class="form-check-label" for="flexCheckDefault">
+    Foratura
+  </label>
+</div>
+
+{% if can_saldatura %}
+<div id="saldatura" class="row border m-3 p-3 form">
+  <h3>Saldatura</h3>
+</div>
+{% endif %}
+<div id="materiali">
+  <h1>Materiali di origine</h1>
+  <div id="aggiunta-materiali row">
+    <select class="form-select" aria-label="Default select example" id="new_materiale">
+      <option value="materiale-collaudo">Materiale con certificato di collaudo</option>
+      <option value="conto-lavorazione">Materiale in conto lavorazione</option>
+    </select>
+  </div>
+  
+  <div id="form-collaudo row">
+    <form>
+      
+      <div class="border rounder m-3 p-3">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
+          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
+        </div>
+        
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
+          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+        </div>
+
+        <div class="row">
+
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
+            <button type="submit" class="btn btn-primary">Aggiungi</button>
+          </div>
+          
+        </div>
+        
+    </form>
+    </div>
+
+    <div id="form-conto-lavorazione row">
+      <form>
+        <div class="border rounder m-3 p-3">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo" name="certificatoCollaudo">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
+          </div>
+
+          <div class="row">
+
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+              <button type="submit" class="btn btn-primary">Aggiungi</button>
+
+            </div>
+          </div>   
+      </form>
+      </div>
+
+
+    </div>
+
+    {% endblock %}
+    {% block js %}
+
+    <script>
+      function wipe(){
+          $("div.form").addClass("d-none")
+      }
+
+      window.onload = wipe()
+
+      function toggleHide(attr){
+          console.log("ecco")
+          if($("#"+attr).hasClass("d-none")){
+              $("#"+attr).removeClass("d-none")
+          }
+          else
+              $("#"+attr).addClass("d-none")
+      }
+
+      console.log("ciao")
+    </script>
+
+    {% endblock %}
