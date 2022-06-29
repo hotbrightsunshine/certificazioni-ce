@@ -1,5 +1,4 @@
 def get_ddt(ddt):
-
     dict_ddt = {
         'id' : int(ddt[0]),
         'datacertificazione' : ddt[1],
@@ -8,10 +7,8 @@ def get_ddt(ddt):
         'data' : ddt[4],
         'stato' : ddt[5]
     }
-
-
-
     return dict_ddt
+
 
 def get_ddts(ddts):
     ddtlist = []

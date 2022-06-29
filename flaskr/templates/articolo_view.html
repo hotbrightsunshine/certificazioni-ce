@@ -1,131 +1,213 @@
-
 {% extends "layout/father.html" %}
 {% block content %}
+<a class="btn btn-info mt-3" href="{{url_for('articoli', ddtnum=ddtnum)}}">Torna indietro</a>
+<div class="row p-3">
 
-
-<h1>Lavorazioni</h1>
-
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura" >
-  <label class="form-check-label" for="flexCheckDefault">
-    Punzonatura
-  </label>
-</div>
-{% if can_saldatura %}
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura" onclick="toggleHide('saldatura')">
-  <label class="form-check-label" for="flexCheckDefault">
-    Saldatura
-  </label>
-</div>
-{% endif %}
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura">
-  <label class="form-check-label" for="flexCheckDefault">
-    Piegatura
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Taglio">
-  <label class="form-check-label" for="flexCheckDefault">
-    Taglio
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura" >
-  <label class="form-check-label" for="flexCheckDefault">
-    Foratura
-  </label>
-</div>
-
-{% if can_saldatura %}
-<div id="saldatura" class="row border m-3 p-3 form">
-  <h3>Saldatura</h3>
-</div>
-{% endif %}
-<div id="materiali">
-  <h1>Materiali di origine</h1>
-  <div id="aggiunta-materiali row">
-    <select class="form-select" aria-label="Default select example" id="new_materiale">
-      <option value="materiale-collaudo">Materiale con certificato di collaudo</option>
-      <option value="conto-lavorazione">Materiale in conto lavorazione</option>
-    </select>
-  </div>
-  
-  <div id="form-collaudo row">
-    <form>
-      
-      <div class="border rounder m-3 p-3">
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
-        </div>
-        
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
-        </div>
-
+    <div class="col-md-6 col-sm-12 border rounded p-3">
+        <form action="{{url_for('update_lavorazioni_articolo', ddtnum=ddtnum, artnum=artnum)}}" method="POST">
         <div class="row">
-
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
-            <button type="submit" class="btn btn-primary">Aggiungi</button>
-          </div>
-          
+            <h1>Lavorazioni</h1>
         </div>
-        
-    </form>
-    </div>
-
-    <div id="form-conto-lavorazione row">
-      <form>
-        <div class="border rounder m-3 p-3">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo" name="certificatoCollaudo">
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
-          </div>
-
-          <div class="row">
-
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
-              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
-              <button type="submit" class="btn btn-primary">Aggiungi</button>
-
+        <div class="row">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Punzonatura
+                </label>
             </div>
-          </div>   
-      </form>
-      </div>
+            {% if can_saldatura %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura"
+                       onclick="toggleHide('saldatura')">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Saldatura
+                </label>
+            </div>
+            {% endif %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Piegatura
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="Taglio" name="Taglio">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Taglio
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Foratura
+                </label>
+            </div>
+
+            {% if can_saldatura %}
+            <div id="saldatura" class="row border m-3 p-3 form">
+                <h3>Saldatura</h3>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <button class="btn-primary btn text-right" type="submit">Salva</button>
+        </div>
+        </form>
+    </div>
+</div>
+<div class="col-md-6 col-sm-12 border rounded p-3">
+    <div id="controlli">
+        <h1>Controlli</h1>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali" name="controlli-dimensionali">
+            <label class="form-check-label" for="flexCheckDefault">
+                Controlli Dimensionali
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi">
+            <label class="form-check-label" for="flexCheckDefault">
+                Controlli Visivi
+            </label>
+        </div>
+        <div class="row">
+            <button class="btn btn-primary" type="submit">Salva</button>
+        </div>
+    </div>
+</div>
 
 
+
+<div id="materiali-from">
+    <h1>Materiali di origine</h1>
+    <div id="aggiunta-materiali row">
+        <select class="form-select" aria-label="Default select example" id="new_materiale">
+            <option value="certificato-collaudo">Materiale con certificato di collaudo</option>
+            <option value="conto-lavorazione">Materiale in conto lavorazione</option>
+        </select>
     </div>
 
-    {% endblock %}
-    {% block js %}
+    <div id="form-conto-lavorazione" class="row">
+        <form>
+            <div class="border rounder m-3 p-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
+                </div>
 
-    <script>
-      function wipe(){
-          $("div.form").addClass("d-none")
-      }
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                </div>
 
-      window.onload = wipe()
+                <div class="row">
 
-      function toggleHide(attr){
-          console.log("ecco")
-          if($("#"+attr).hasClass("d-none")){
-              $("#"+attr).removeClass("d-none")
-          }
-          else
-              $("#"+attr).addClass("d-none")
-      }
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
+                        <button type="submit" class="btn btn-primary">Aggiungi</button>
+                    </div>
 
-      console.log("ciao")
-    </script>
+                </div>
+            </div>
+        </form>
+    </div>
 
-    {% endblock %}
+    <div id="form-certificato-collaudo" class="row">
+        <form>
+            <div class="border rounder m-3 p-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo"
+                           name="certificatoCollaudo">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
+                </div>
+
+                <div class="row">
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                        <button type="submit" class="btn btn-primary">Aggiungi</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<div id="lista-materiali">
+</div>
+
+<div id="ordini">
+    <h1>Ordini</h1>
+    <div class="row rounded border p-3 m-3">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Numero</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <button class="btn btn-primary">Aggiungi</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+
+<script>
+ function hideFormMateriale() {
+     if ($("#new_materiale").val() == "certificato-collaudo") {
+         console.log("form certificato di collaudo")
+         $("#form-certificato-collaudo").removeClass("d-none");
+         $("#form-conto-lavorazione").addClass("d-none");
+     } else {
+         console.log("form conto lavorazione")
+         $("#form-certificato-collaudo").addClass("d-none");
+         $("#form-conto-lavorazione").removeClass("d-none");
+     }
+ }
+
+ $("#new_materiale").on("change", hideFormMateriale);
+
+ function wipe() {
+     $("form-collaudo").addClass("d-none")
+     $("form-conto-lavorazione").addClass("d-none")
+     hideFormMateriale()
+     $("div.form").addClass("d-none")
+ }
+
+ window.onload = function () {
+     hideFormMateriale();
+     wipe();
+ }
+
+ function toggleHide(attr) {
+     console.log("ecco")
+     if ($("#" + attr).hasClass("d-none")) {
+         $("#" + attr).removeClass("d-none")
+     } else
+         $("#" + attr).addClass("d-none")
+ }
+
+ console.log("ciao")
+</script>
+
+{% endblock %}

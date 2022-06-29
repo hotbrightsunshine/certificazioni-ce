@@ -1,14 +1,16 @@
-import pyodbc 
+import pyodbc
 import dotenv
-import os 
+import os
 
 from record_to_dict import get_ddts, get_ddt
+
 
 def is_logged(session):
     try:
         return session['login'] == 'ok'
     except:
         return False
+
 
 def is_ce(username):
     q = query(f'select * from testpython.cefusr0f where ceusid = \'{username}\'')
@@ -20,23 +22,24 @@ def is_ce(username):
         return False
     else:
         return False
-    
+
+
 def get_username(session):
     if is_logged(session):
         return session['username']
     else:
         return None
-    
+
+
 def get_secret_key():
-    
     return os.getenv("SECRET")
 
+
 def get_db_connection():
-    
     cnxn = pyodbc.connect('DRIVER={IBM i Access ODBC Driver};SYSTEM=lf;UID='+ os.getenv("DB_USERNAME") +';PWD='+os.getenv("DB_PASSWORD")+';')
     return cnxn
-    
-    
+
+
 def query(q:str):
     conn = get_db_connection()
     cur = conn.cursor()
@@ -68,8 +71,7 @@ def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
         values (
         '{date}', '{fornitore}',
         '{numddt}', '{dataddt}', ' ' )"""
-        try: 
-            
+        try:
             execute(demo_query)
             return True
         except:
@@ -79,17 +81,17 @@ def register_ddt(date:str, fornitore:str, numddt:str, dataddt:str):
 def get_ddt_of_username(username:str, num=None):
     if num == None:
         ddtlist = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}' AND cedtata=' '")
-
         return get_ddts(ddtlist)
     else:
         ddt = query(f"SELECT * FROM testpython.CEFDDT0F WHERE cedtidus='{username}' AND CEDTID={num} AND cedtata=' ' ")
-        
         return get_ddt(ddt[0])
+
 
 def remove_ddt(num:int):
     q = f"update testpython.cefddt0f set cedtata='r' where cedtid={num}"
     execute(q)
-    
+
+
 def get_articolo(art):
     return {
         'id': int(art[0]),
@@ -134,40 +136,65 @@ def int_to_bool(val:int):
         return True
     else:
         return False
-    
+
+
+def it_or_false(req, key):
+    try:
+        req[key]
+        return True
+    except:
+        return False
+
+
+def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
+    taglio = bool_to_int(taglio)
+    punzonatura = bool_to_int(punzonatura)
+    saldatura = bool_to_int(saldatura)
+    piegatura = bool_to_int(piegatura)
+    foratura = bool_to_int(foratura)
+    q = f"""
+    update testpython.cefart0f
+    set
+    cearpunz = {punzonatura},
+    ceartagl = {taglio},
+    cearfora = {foratura},
+    cearpieg = {piegatura},
+    cearsald = {saldatura}
+    where cearid = {artnum}
+    """
+    execute(q)
+
 def get_article_and_insert_it(request, ddtnum):
-        codice_interno = request.form['codice-interno']
-        quantita = request.form['quantita']
+    def it_or_false(req):
+        if req in request.form:
+            return True
+        else:
+            return False
 
-        def it_or_false(req):
-            if req in request.form:
-                return True
-            else:
-                return False
+    codice_interno = request.form['codice-interno']
+    quantita = request.form['quantita']
+    punzonatura = it_or_false('punzonatura')
+    taglio = it_or_false('taglio')
+    piegatura = it_or_false('piegatura')
+    foratura = it_or_false('foratura')
+    saldatura = it_or_false('saldatura')
+    controlli_visivi = it_or_false('controlli-visivi')
+    controlli_dimensionali = it_or_false('controlli-dimensionali')
+    insert_article(
+        ddt=ddtnum,
+        filedic=" ",
+        codice_interno=codice_interno,
+        quantita=quantita,
+        punzonatura=bool_to_int(punzonatura),
+        taglio=bool_to_int(taglio),
+        piegatura=bool_to_int(piegatura),
+        foratura=bool_to_int(foratura),
+        saldatura=bool_to_int(saldatura),
+        controlli_visivi=bool_to_int(controlli_visivi),
+        controlli_dimensionali=bool_to_int(controlli_dimensionali))
 
-        punzonatura = it_or_false('punzonatura')
-        taglio = it_or_false('taglio')
-        piegatura = it_or_false('piegatura')
-        foratura = it_or_false('foratura')
-        saldatura = it_or_false('saldatura')
-        controlli_visivi = it_or_false('controlli-visivi')
-        controlli_dimensionali = it_or_false('controlli-dimensionali')
-        insert_article(
-            ddt=ddtnum,
-            filedic=" ",
-            codice_interno=codice_interno,
-            quantita=quantita,
-            punzonatura=bool_to_int(punzonatura),
-            taglio=bool_to_int(taglio),
-            piegatura=bool_to_int(piegatura),
-            foratura=bool_to_int(foratura),
-            saldatura=bool_to_int(saldatura),
-            controlli_visivi=bool_to_int(controlli_visivi),
-            controlli_dimensionali=bool_to_int(controlli_dimensionali))
-       
 
 def insert_article (ddt, codice_interno, quantita, filedic, punzonatura, piegatura, taglio, foratura, saldatura, controlli_visivi, controlli_dimensionali):
-    
     q = f"INSERT INTO testpython.cefart0f (cearddtid, cearcdpa, cearqty, cearpunz, ceartagl, cearfora, cearpieg, cearsald, cearctdi, cearctvi, cearfile, cearata) VALUES ( '{ddt}', '{codice_interno}', {quantita}, {punzonatura}, {taglio}, {foratura}, {piegatura}, {saldatura}, {controlli_visivi}, {controlli_dimensionali}, ' ', ' ')"
     
     execute(q)
