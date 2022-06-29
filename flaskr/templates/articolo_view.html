@@ -5,74 +5,77 @@
 
     <div class="col-md-6 col-sm-12 border rounded p-3">
         <form action="{{url_for('update_lavorazioni_articolo', ddtnum=ddtnum, artnum=artnum)}}" method="POST">
-        <div class="row">
-            <h1>Lavorazioni</h1>
-        </div>
-        <div class="row">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Punzonatura
-                </label>
+            <div class="row">
+                <h1>Lavorazioni</h1>
             </div>
-            {% if can_saldatura %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura"
-                       onclick="toggleHide('saldatura')">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Saldatura
-                </label>
+            <div class="row">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Punzonatura
+                    </label>
+                </div>
+                {% if can_saldatura %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura"
+                        onclick="toggleHide('saldatura')">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Saldatura
+                    </label>
+                </div>
+                {% endif %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Piegatura
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="Taglio" name="Taglio">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Taglio
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Foratura
+                    </label>
+                </div>
+
+                {% if can_saldatura %}
+                <div id="saldatura" class="row border m-3 p-3 form">
+                    <h3>Saldatura</h3>
+                </div>
             </div>
             {% endif %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Piegatura
-                </label>
+            <div class="row">
+                <button class="btn-primary btn text-right" type="submit">Salva</button>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="Taglio" name="Taglio">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Taglio
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Foratura
-                </label>
-            </div>
-
-            {% if can_saldatura %}
-            <div id="saldatura" class="row border m-3 p-3 form">
-                <h3>Saldatura</h3>
-            </div>
-        </div>
-        {% endif %}
-        <div class="row">
-            <button class="btn-primary btn text-right" type="submit">Salva</button>
-        </div>
         </form>
     </div>
 </div>
 <div class="col-md-6 col-sm-12 border rounded p-3">
     <div id="controlli">
-        <h1>Controlli</h1>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali" name="controlli-dimensionali">
-            <label class="form-check-label" for="flexCheckDefault">
-                Controlli Dimensionali
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi">
-            <label class="form-check-label" for="flexCheckDefault">
-                Controlli Visivi
-            </label>
-        </div>
-        <div class="row">
-            <button class="btn btn-primary" type="submit">Salva</button>
-        </div>
+        <form action="{{url_for('update_controlli', ddtnum=ddtnum, artnum=artnum)}}" method="post" >
+            <h1>Controlli</h1>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali"
+                    name="controlli-dimensionali">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Controlli Dimensionali
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Controlli Visivi
+                </label>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" type="submit">Salva</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -93,13 +96,13 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
+                        aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                        aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
                 </div>
 
                 <div class="row">
@@ -107,7 +110,7 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
                         <input type="text" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
+                            aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
                         <button type="submit" class="btn btn-primary">Aggiungi</button>
                     </div>
 
@@ -122,14 +125,14 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo"
-                           name="certificatoCollaudo">
+                        aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo"
+                        name="certificatoCollaudo">
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
+                        aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
                 </div>
 
                 <div class="row">
@@ -137,7 +140,7 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
                         <input type="text" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                            aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
                         <button type="submit" class="btn btn-primary">Aggiungi</button>
                     </div>
                 </div>
@@ -156,15 +159,18 @@
     <div class="row rounded border p-3 m-3">
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Numero</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default">
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default">
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default">
             <button class="btn btn-primary">Aggiungi</button>
         </div>
     </div>
@@ -173,41 +179,41 @@
 {% block js %}
 
 <script>
- function hideFormMateriale() {
-     if ($("#new_materiale").val() == "certificato-collaudo") {
-         console.log("form certificato di collaudo")
-         $("#form-certificato-collaudo").removeClass("d-none");
-         $("#form-conto-lavorazione").addClass("d-none");
-     } else {
-         console.log("form conto lavorazione")
-         $("#form-certificato-collaudo").addClass("d-none");
-         $("#form-conto-lavorazione").removeClass("d-none");
-     }
- }
+    function hideFormMateriale() {
+        if ($("#new_materiale").val() == "certificato-collaudo") {
+            console.log("form certificato di collaudo")
+            $("#form-certificato-collaudo").removeClass("d-none");
+            $("#form-conto-lavorazione").addClass("d-none");
+        } else {
+            console.log("form conto lavorazione")
+            $("#form-certificato-collaudo").addClass("d-none");
+            $("#form-conto-lavorazione").removeClass("d-none");
+        }
+    }
 
- $("#new_materiale").on("change", hideFormMateriale);
+    $("#new_materiale").on("change", hideFormMateriale);
 
- function wipe() {
-     $("form-collaudo").addClass("d-none")
-     $("form-conto-lavorazione").addClass("d-none")
-     hideFormMateriale()
-     $("div.form").addClass("d-none")
- }
+    function wipe() {
+        $("form-collaudo").addClass("d-none")
+        $("form-conto-lavorazione").addClass("d-none")
+        hideFormMateriale()
+        $("div.form").addClass("d-none")
+    }
 
- window.onload = function () {
-     hideFormMateriale();
-     wipe();
- }
+    window.onload = function () {
+        hideFormMateriale();
+        wipe();
+    }
 
- function toggleHide(attr) {
-     console.log("ecco")
-     if ($("#" + attr).hasClass("d-none")) {
-         $("#" + attr).removeClass("d-none")
-     } else
-         $("#" + attr).addClass("d-none")
- }
+    function toggleHide(attr) {
+        console.log("ecco")
+        if ($("#" + attr).hasClass("d-none")) {
+            $("#" + attr).removeClass("d-none")
+        } else
+            $("#" + attr).addClass("d-none")
+    }
 
- console.log("ciao")
+    console.log("ciao")
 </script>
 
 {% endblock %}

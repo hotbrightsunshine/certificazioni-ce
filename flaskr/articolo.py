@@ -38,6 +38,12 @@ class Articolo:
         DB.update_field("testpython.cefart0f", "cearpieg", f"'{piegatura}'", f"cearid={artnum}")
         DB.update_field("testpython.cefart0f", "cearsald", f"'{saldatura}'", f"cearid={artnum}")
 
+    def update_controlli(artnum, controlli_dimensionali, controlli_visivi):
+        controlli_dimensionali = Util.bool_to_int(controlli_dimensionali)
+        controlli_visivi = Util.bool_to_int(controlli_visivi)
+        DB.update_field("testpython.cefart0f", "cearctdi", controlli_dimensionali, f"cearid={artnum}")
+        DB.update_field("testpython.cefart0f", "cearctvi", controlli_visivi, f"cearid={artnum}")
+
     def get_list(artlist):
         diclist = []
         for art in artlist:

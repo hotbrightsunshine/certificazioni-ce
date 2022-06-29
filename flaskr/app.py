@@ -1,4 +1,5 @@
 import os
+from ossaudiodev import control_labels
 
 from flask import Flask, render_template, request, session, redirect, url_for
 
@@ -152,6 +153,17 @@ def update_lavorazioni_articolo(ddtnum:int, artnum:int):
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
+
+## Articolo > SaveControlli
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/controlli", methods=["GET", "POST"])
+def update_controlli(ddtnum:int, artnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    controlli_dimensionali = Util.it_or_false(request.form, "controlli-dimensionali")
+    controlli_visivi = Util.it_or_false(request.form, "controlli-visivi")
+
+    Articolo.update_controlli(artnum, controlli_dimensionali, controlli_visivi)
+    return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
 ## Main
 if __name__ == '__main__':
