@@ -12,6 +12,18 @@ app.secret_key = get_secret_key()
 app.jinja_env.globals['login'] = is_logged(session)
 
 
+def is_logged(session):
+    try:
+        return session['login'] == 'ok'
+    except:
+        return False
+
+def get_username(session):
+    if is_logged(session):
+        return session['username']
+    else:
+        return None
+
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
