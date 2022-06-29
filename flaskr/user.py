@@ -8,7 +8,7 @@ class User:
     def is_ce(username):
         q = DB.select_star("testpython.cefusr0f", f"ceusid = '{username}'")
         q = q[0]
-        ce = q[2]
+        ce = q['CEUSTIFO']
         if ce == 'C':
             return True
         elif ce == 'F':

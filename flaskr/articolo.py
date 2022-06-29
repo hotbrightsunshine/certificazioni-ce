@@ -23,11 +23,8 @@ class Articolo:
         }
 
     def get_with_ddt_number(ddtnum):
-        articoli = DB.select_field("cearid","testpython.cefart0f", f"cearddtid={ddtnum}")
-        articoliInt = []
-        for art in articoli:
-            articoliInt.append(art[0])
-        return Articolo.get_list(articoliInt)
+        articoli = DB.select_star("testpython.cefart0f", f"cearddtid={ddtnum}")
+        return articoli
 
     def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
         taglio = Util.bool_to_int(taglio)
