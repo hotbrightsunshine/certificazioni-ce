@@ -28,7 +28,12 @@ class Articolo:
         saldatura = Util.bool_to_int(saldatura)
         piegatura = Util.bool_to_int(piegatura)
         foratura = Util.bool_to_int(foratura)
-        DB.update_field()
+        DB.update_field("cefart0f", "cearpunz", f"'{punzonatura}'", f"cearid={artnum}")
+        DB.update_field("cefart0f", "ceartagl", f"'{taglio}'", f"cearid={artnum}")
+        DB.update_field("cefart0f", "cearfora", f"'{foratura}'", f"cearid={artnum}")
+        DB.update_field("cefart0f", "cearpieg", f"'{piegatura}'", f"cearid={artnum}")
+        DB.update_field("cefart0f", "cearsald", f"'{saldatura}'", f"cearid={artnum}")
+
        
     def get(art):
         return {

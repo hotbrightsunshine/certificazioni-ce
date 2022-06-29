@@ -1,16 +1,12 @@
+import os
+
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import *
-from record_to_dict import *
 
-
-## Flask App iniprint(tialization
-app = Flask(__name__)
-app.secret_key = get_secret_key()
-
-
-## Flask Configuration
-app.jinja_env.globals['login'] = is_logged(session)
-
+from db import DB
+from ddt import DDT
+from articolo import Articolo
+from util import Util
+from user import User
 
 def is_logged(session):
     try:
@@ -18,11 +14,22 @@ def is_logged(session):
     except:
         return False
 
+
 def get_username(session):
     if is_logged(session):
         return session['username']
     else:
         return None
+
+
+## Flask App iniprint(tialization
+app = Flask(__name__)
+app.secret_key = os.get_env("SECRET")
+
+
+## Flask Configuration
+app.jinja_env.globals['login'] = is_logged(session)
+
 
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
@@ -31,10 +38,10 @@ def login():
     if is_logged(session):
         return redirect(url_for("index"))
     elif request.method == "POST":
-        if is_user(request.form['username'], request.form['password']):
+        if User.is_valid(request.form['username'], request.form['password']):
             session['login'] = 'ok'
             session['username'] = request.form['username']
-            session['certificazione'] = is_ce(session['username'])
+            session['certificazione'] = User.is_ce(session['username'])
             return redirect(url_for("index"))
     print(fetched)
     print(request.form)
@@ -57,7 +64,7 @@ def index():
     username = session.get('username')
     login = session.get('login')
     print(username)
-    ddtlist = get_ddt_of_username(username, None)
+    ddtlist = DDT.get_of_username(username, None)
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
 
 
@@ -73,7 +80,7 @@ def newddt():
         username = session.get("username")
         numero = request.form["numero"]
         date = request.form["date"]
-        if register_ddt(
+        if DDT.insert(
                 datacert,
                 username,
                 numero,
@@ -86,7 +93,7 @@ def newddt():
 ## Remove DDT Redirect
 @app.route("/ddt/<int:ddtnum>/delete", methods=['POST', 'GET'])
 def removeddt(ddtnum:int):
-    remove_ddt(ddtnum)
+    DDT.remove(ddtnum)
     return redirect(url_for('index'))
 
 ## DDT Detailed View
@@ -95,7 +102,7 @@ def ddt(ddtnum:int):
     if is_logged(session) == False:
         return redirect("login")
 
-    ddt = get_ddt_of_username(session['username'], ddtnum)
+    ddt = DDT.get_of_username(session['username'], ddtnum)
 
     return render_template("ddt_view.html", ddt=ddt)
 
@@ -108,9 +115,9 @@ def articoli(ddtnum:int):
         return redirect(url_for("login"))
 
     if request.method == 'POST':
-        get_article_and_insert_it(request, ddtnumatura)
+        Articolo.get_and_insert(request, ddtnum)
     print(request.form)
-    articoli = get_articles_with_ddt_number(ddtnum)
+    articoli = Articolo.get_with_ddt_number(ddtnum)
     return render_template("articoli.html", articles = articoli, ddtnum=ddtnum)
 
 
@@ -128,8 +135,7 @@ def articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
     lavorazioni = []
-    return render_template("articolo_view.html", artnum = artnum,
-                           ddtnum = ddtnum, lavorazioni = lavorazioni)
+    return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, lavorazioni = lavorazioni)
 
 
 ## Articolo > SaveLavorazioni
@@ -137,13 +143,13 @@ def articolo(ddtnum:int, artnum:int):
 def update_lavorazioni_articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
-    taglio = it_or_false(request.form, "Taglio")
-    punzonatura = it_or_false(request.form, "Punzonatura")
-    saldatura = it_or_false(request.form, "Saldatura")
-    piegatura = it_or_false(request.form, "Piegatura")
-    foratura= it_or_false(request.form, "Foratura")
+    taglio = Util.it_or_false(request.form, "Taglio")
+    punzonatura = Util.it_or_false(request.form, "Punzonatura")
+    saldatura = Util.it_or_false(request.form, "Saldatura")
+    piegatura = Util.it_or_false(request.form, "Piegatura")
+    foratura= Util.it_or_false(request.form, "Foratura")
 
-    update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura)
+    Articolo.update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 

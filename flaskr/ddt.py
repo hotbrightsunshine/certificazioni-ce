@@ -30,3 +30,18 @@ class DDT:
             ddtlist.append(DDT.get_ddt_from_record(ddt))
         return ddtlist
 
+    def insert(date, fornitore, numddt, dataddt):
+        q = f"""insert into testpython.cefddt0f (
+        cedtcedt,
+        cedtidus,
+        cedtddtnr,
+        cedtddtdt,
+        cedtata)
+        values (
+        '{date}', '{fornitore}',
+        '{numddt}', '{dataddt}', ' ' )"""
+        try:
+            DB.execute(q)
+            return True
+        except:
+            return False

@@ -48,18 +48,4 @@ class DB:
         q = f"UPDATE {table} SET {field} = {value} WHERE {condition}"
         DB.execute(q)
 
-    def insert_ddt(date, fornitore, numddt, dataddt):
-        q = f"""insert into testpython.cefddt0f (
-        cedtcedt,
-        cedtidus,
-        cedtddtnr,
-        cedtddtdt,
-        cedtata)
-        values (
-        '{date}', '{fornitore}',
-        '{numddt}', '{dataddt}', ' ' )"""
-        try:
-            DB.execute(q)
-            return True
-        except:
-            return False
+
