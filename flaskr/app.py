@@ -115,7 +115,7 @@ def articoli(ddtnum:int):
 
     if request.method == 'POST':
         Articolo.get_and_insert(request, ddtnum)
-    print(request.form)
+
     articoli = Articolo.get_with_ddt_number(ddtnum)
     return render_template("articoli.html", articles = articoli, ddtnum=ddtnum)
 

@@ -2,25 +2,32 @@ from db import DB
 from util import *
 
 class Articolo:
-    def get_from_record(record):
+    def get(art_num):
+        art_num = int(art_num)
+        p= DB.select_field("cearddtid, cearcdpa, cearqty", "testpython.cefart0f", f"cearid={art_num}")
+        print(p[0].cearddtid)
         return {
-            'id': int(record[0]),
-            'idcertificazione': int(record[1]),
-            'codice_interno': record[2],
-            'quantita': int(record[3]),
-            'punzonatura': Util.int_to_bool(record[4]),
-            'foratura': Util.int_to_bool(record[5]),
-            'piegatura': Util.int_to_bool(record[6]),
-            'saldatura': Util.int_to_bool(record[7]),
-            'ctrldimensionali': Util.int_to_bool(record[8]),
-            'ctrlvisivi': Util.int_to_bool(record[9]),
-            'file': Util.int_to_bool(record[10]),
-            'stato': Util.int_to_bool(record[11]),
+            
+            'id': art_num,
+            'idcertificazione': DB.select_field("cearddtid", "cefart0f", f"cearid={art_num}"),
+            'codice_interno': DB.select_field("cearcdpa", "cefart0f", f"cearid={art_num}"),
+            'quantita': DB.select_field("cearqty", "cefart0f", f"cearid={art_num}"),
+            'punzonatura': Util.int_to_bool(DB.select_field("cearpunz", "cefart0f", f"cearid={art_num}")),
+            'foratura': Util.int_to_bool(DB.select_field("cearfora", "cefart0f", f"cearid={art_num}")),
+            'piegatura': Util.int_to_bool(DB.select_field("cearpieg", "cefart0f", f"cearid={art_num}")),
+            'saldatura': Util.int_to_bool(DB.select_field("cearsald", "cefart0f", f"cearid={art_num}")),
+            'ctrldimensionali': Util.int_to_bool(DB.select_field("cearctdi", "cefart0f", f"cearid={art_num}")),
+            'ctrlvisivi': Util.int_to_bool(DB.select_field("cearctvi", "cefart0f", f"cearid={art_num}")),
+            'file': Util.int_to_bool(DB.select_field("cearfile", "cefart0f", f"cearid={art_num}")),
+            'stato': Util.int_to_bool(DB.select_field("cearata", "cefart0f", f"cearid={art_num}")),
         }
 
     def get_with_ddt_number(ddtnum):
-        articoli = DB.select_star("testpython.cefart0f", f"cearddtid={ddtnum}")
-        return Articolo.get_list(articoli)
+        articoli = DB.select_field("cearid","testpython.cefart0f", f"cearddtid={ddtnum}")
+        articoliInt = []
+        for art in articoli:
+            articoliInt.append(art[0])
+        return Articolo.get_list(articoliInt)
 
     def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
         taglio = Util.bool_to_int(taglio)
@@ -28,28 +35,11 @@ class Articolo:
         saldatura = Util.bool_to_int(saldatura)
         piegatura = Util.bool_to_int(piegatura)
         foratura = Util.bool_to_int(foratura)
-        DB.update_field("cefart0f", "cearpunz", f"'{punzonatura}'", f"cearid={artnum}")
-        DB.update_field("cefart0f", "ceartagl", f"'{taglio}'", f"cearid={artnum}")
-        DB.update_field("cefart0f", "cearfora", f"'{foratura}'", f"cearid={artnum}")
-        DB.update_field("cefart0f", "cearpieg", f"'{piegatura}'", f"cearid={artnum}")
-        DB.update_field("cefart0f", "cearsald", f"'{saldatura}'", f"cearid={artnum}")
-
-       
-    def get(art):
-        return {
-            'id': int(art[0]),
-            'idcertificazione': int(art[1]),
-            'codice_interno': art[2],
-            'quantita': int(art[3]),
-            'punzonatura': Util.int_to_bool(art[4]),
-            'foratura': Util.int_to_bool(art[5]),
-            'piegatura': Util.int_to_bool(art[6]),
-            'saldatura': Util.int_to_bool(art[7]),
-            'ctrldimensionali': Util.int_to_bool(art[8]),
-            'ctrlvisivi': Util.int_to_bool(art[9]),
-            'file': Util.int_to_bool(art[10]),
-            'stato': Util.int_to_bool(art[11]),
-        } 
+        DB.update_field("testpython.cefart0f", "cearpunz", f"'{punzonatura}'", f"cearid={artnum}")
+        DB.update_field("testpython.cefart0f", "ceartagl", f"'{taglio}'", f"cearid={artnum}")
+        DB.update_field("testpython.cefart0f", "cearfora", f"'{foratura}'", f"cearid={artnum}")
+        DB.update_field("testpython.cefart0f", "cearpieg", f"'{piegatura}'", f"cearid={artnum}")
+        DB.update_field("testpython.cefart0f", "cearsald", f"'{saldatura}'", f"cearid={artnum}")
 
     def get_list(artlist):
         diclist = []

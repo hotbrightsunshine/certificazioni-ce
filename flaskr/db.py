@@ -23,6 +23,7 @@ class DB:
         return cnxn
 
     def query(q:str):
+        #print("QUERY: ", q)
         conn = DB.get_connection()
         cur = conn.cursor()
         cur.execute(q)
@@ -31,7 +32,17 @@ class DB:
         conn.close()
         return fetched
 
+    def query_dict(q:str):
+        cursor = DB.get_connection().cursor().execute(q)
+        columns = [column[0] for column in cursor.description]
+        results = []
+        for row in cursor.fetchall():
+            results.append(dict(zip(columns, row)))
+        print(results)
+
+
     def execute(q:str):
+        #print("EXECUTE: ", q)
         conn = DB.get_connection()
         conn.execute(q)
         conn.commit()
@@ -40,7 +51,7 @@ class DB:
     def select_field(field, table, condition):
         q = f"SELECT {field} FROM {table} WHERE {condition}"
         return DB.query(q)
-    
+
     def select_star(table, condition):
         return DB.select_field("*", table, condition)
     
