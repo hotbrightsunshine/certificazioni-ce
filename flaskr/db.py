@@ -7,6 +7,7 @@ class DB:
         return cnxn
 
     def query(q:str):
+        #print("QUERY: ", q)
         conn = DB.get_connection()
         cur = conn.cursor()
         cur.execute(q)
@@ -16,6 +17,7 @@ class DB:
         return fetched
 
     def query_dict(q:str):
+        print("QUERY: ", q)
         cursor = DB.get_connection().cursor().execute(q)
         columns = [column[0] for column in cursor.description]
         results = []
@@ -26,7 +28,7 @@ class DB:
 
 
     def execute(q:str):
-        print("EXECUTE: ", q)
+        #print("EXECUTE: ", q)
         conn = DB.get_connection()
         conn.execute(q)
         conn.commit()

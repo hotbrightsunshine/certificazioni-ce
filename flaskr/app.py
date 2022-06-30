@@ -136,7 +136,12 @@ def articolo(ddtnum:int, artnum:int):
         return redirect(url_for("login"))
     materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}'")
     isce = User.is_ce(session.get('username'))
-    return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, materiali=materiali, isce=isce)
+    can_saldatura = User.can_saldatura(session.get('username'))
+
+    err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
+
+    return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, 
+        materiali=materiali, isce=isce, can_saldatura=can_saldatura, err_apporto_mancante=err_apporto_mancante)
 
 
 ## Articolo > SaveLavorazioni
@@ -176,20 +181,17 @@ def add_materiale_collaudo(ddtnum:int, artnum:int, matnum:int):
     certcollaudo=request.form['certificatoCollaudo']
     datacollaudo=request.form['dataCertificato']
 
-    # Materiale tipo
+    tipomateriale = request.form['tipoMateriale2']
 
-    try:
-        num_dop=request.form['numdop']
-        data_dop=request.form['datadop']
-    except:
-        num_dop=None
-        data_dop=None
+
+    dop=Util.it_or_false(request.form, "dop")
+    dop=Util.bool_to_int(dop)
         
 
     if matnum==0:
-        Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale,num_dop, data_dop)
+        Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop)
     else:
-        Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, num_dop, data_dop, id=matnum)
+        Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop, id=matnum)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
@@ -202,20 +204,12 @@ def add_materiale_conto_lavorazione(ddtnum:int, artnum:int, matnum:int):
     codicecomponente=request.form['codiceComponente']
     numerocolata=request.form['numeroColata']
     punzonatura=request.form['punzonatura']
-
-    #tipomateriale=
-
-    try:
-        numdop=request.form['numdop']
-        datadop=request.form['datadop']
-    except:
-        numdop=None
-        datadop=None
+    tipomateriale = request.form['tipoMateriale']
         
     if matnum==0:
-        Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale, numdop, datadop)
+        Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale)
     else:
-        Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale, numdop, datadop, matnum)
+        Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale, matnum)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 ## Articolo > SaveMaterialeD'Apporto

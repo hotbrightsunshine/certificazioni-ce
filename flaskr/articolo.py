@@ -82,14 +82,11 @@ class Articolo:
          VALUES ( '{ddt}', '{codice_interno}', {quantita}, {punzonatura}, {taglio}, {foratura}, {piegatura}, {saldatura}, {controlli_visivi}, {controlli_dimensionali}, ' ', ' ')"""
         DB.execute(q)
 
-    def update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipo_materiale, num_dop=None, data_dop=None, _id=None):
+    def update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipo_materiale, dop=None, _id=None):
+        print("dop: ",dop)
         if _id==None:
-            if num_dop != None and data_dop != None:
-                DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceordopnr, ceordopdt, ceorcolnr, ceorcllnr, ceorclldt, ceororig, ceortpma) 
-                VALUES ({artnum}, '{num_dop}', '{data_dop}', '{colata}', '{certcollaudo}', '{datacollaudo}', '2', {tipo_materiale})""")
-            else: 
-                DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceorcolnr, ceorcllnr, ceorclldt, ceororig, ceortpma) 
-                VALUES ({artnum}, '{colata}', '{certcollaudo}', '{datacollaudo}', '{datacollaudo}', '2', {tipo_materiale})""")    
+            DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceordopnr, ceorcolnr, ceorcllnr, ceorclldt, ceororig, ceortpma) 
+                VALUES ({artnum}, '{dop}', '{colata}', '{certcollaudo}', '{datacollaudo}', '2', '{tipo_materiale}')""")  
         else:
             DB.update_field("testpython.cefori0f", "ceorcolnr", f"'{colata}'", f"ceorid={_id}")
             DB.update_field("testpython.cefori0f", "ceoridar", f"{artnum}", f"ceorid={_id}")
@@ -97,20 +94,34 @@ class Articolo:
             DB.update_field("testpython.cefori0f", "ceorclldt", f"'{datacollaudo}'", f"ceorid={_id}")
 
 
-    def update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipo_materiale, numdop=None, datadop=None, _id=None):
+    def update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipo_materiale, dop=None, _id=None):
         if _id==None:
-            if numdop != None and numdop != None:
-                DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceorcdpar, ceorcolnr, ceorpunnr, ceororig, ceortpma) VALUES (
-                    {artnum}, '{codicecomponente}', '{numerocolata}', '{punzonatura}', '1', {tipo_materiale})""")
-            else: 
-                DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceorcdpar, ceorcolnr, ceorpunnr, ceordopnr, ceordopdt, ceororig, ceortpma) VALUES (
-                    {artnum}, '{codicecomponente}', '{numerocolata}', '{punzonatura}', '{numdop}', '{datadop}', '1', {tipo_materiale})""")  
+            DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceorcdpar, ceorcolnr, ceorpunnr, ceororig, ceortpma) VALUES (
+                    {artnum}, '{codicecomponente}', '{numerocolata}', '{punzonatura}', '1', '{tipo_materiale}')""")  
         else:
             DB.update_field("testpython.cefori0f", "ceorcolnr", f"'{numerocolata}'", f"ceorid={_id}")
             DB.update_field("testpython.cefori0f", "ceoridar", f"{artnum}", f"ceorid={_id}")
             DB.update_field("testpython.cefori0f", "ceorpunnr", f"'{punzonatura}'", f"ceorid={_id}")
             DB.update_field("testpython.cefori0f", "ceorcdpar", f"'{codicecomponente}'", f"ceorid={_id}")
         
+    def is_apporto_mancante(artnum):
+        #se l'articolo ha la saldatura, controllare che ci sia un materiale d'apporto associato
+        sald = DB.select_field("cearsald", "testpython.cefart0f", f"cearid={artnum}")
+        is_article_with_saldatura = False
+        for record in sald:
+            if int(record['CEARSALD']) == 1:
+                is_article_with_saldatura = True
+
+        print("has_saldatura: ", is_article_with_saldatura)
+        if not is_article_with_saldatura:
+            return False # Non avendo saldature, non c'è nessun materiale d'apporto mancante.
+        else:
+            ori = DB.select_star("testpython.cefori0f", f"ceoridar={artnum} and ceortpma='A'")
+            print("ori: ", ori)
+            if len(ori) == 0:
+                return True
+            else:
+                return False
 
         
 
