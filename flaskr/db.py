@@ -17,7 +17,7 @@ class DB:
         return fetched
 
     def query_dict(q:str):
-        print("QUERY: ", q)
+        #print("QUERY: ", q)
         cursor = DB.get_connection().cursor().execute(q)
         columns = [column[0] for column in cursor.description]
         results = []

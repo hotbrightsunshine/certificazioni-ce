@@ -197,25 +197,37 @@
 </div>
 
 <div id="ordini">
+    <form action="{{url_for('add_order', ddtnum=ddtnum, artnum=artnum)}}" method="post">
     <h1>Ordini</h1>
     <div class="row rounded border p-3 m-3">
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Numero</span>
             <input type="text" class="form-control" aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default">
+                aria-describedby="inputGroup-sizing-default" name="numeroOrdine" id="numeroOrdine">
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
             <input type="date" class="form-control" aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default">
+                aria-describedby="inputGroup-sizing-default" name="dataOrdine" id="dataOrdine">
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
-            <input type="text" class="form-control" aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default">
-            <button class="btn btn-primary">Aggiungi</button>
+
+  <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
+  <input type="number" class="form-control" max="{{max_qty}}" name="quantitaOrdine" id="quantitaOrdine">
+  <button class="btn btn-primary" type="submit">Aggiungi</button>
         </div>
+
     </div>
+</form>
+</div>
+
+<div id="ordini-list">
+    {% for ord in ordini %}
+    <div class="row">
+        {{ord}}
+    </div>
+
+    {% endfor %}
 </div>
 {% endblock %}
 {% block js %}

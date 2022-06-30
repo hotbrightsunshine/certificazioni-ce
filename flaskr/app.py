@@ -140,8 +140,12 @@ def articolo(ddtnum:int, artnum:int):
 
     err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
 
+    ordini=Articolo.get_orders_of(artnum)
+    print("ORDINI: ", ordini)
+
     return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, 
-        materiali=materiali, isce=isce, can_saldatura=can_saldatura, err_apporto_mancante=err_apporto_mancante)
+        materiali=materiali, isce=isce, can_saldatura=can_saldatura, err_apporto_mancante=err_apporto_mancante, 
+        ordini=ordini)
 
 
 ## Articolo > SaveLavorazioni
@@ -171,6 +175,7 @@ def update_controlli(ddtnum:int, artnum:int):
     Articolo.update_controlli(artnum, controlli_dimensionali, controlli_visivi)
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
+
 ## Articolo > SaveMaterialeCollaudo
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecollaudo/<int:matnum>", methods=["POST"])
 def add_materiale_collaudo(ddtnum:int, artnum:int, matnum:int):
@@ -195,6 +200,7 @@ def add_materiale_collaudo(ddtnum:int, artnum:int, matnum:int):
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
+
 ## Articolo > SaveMaterialeContoLavorazione
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecontolavorazione/<int:matnum>", methods=["POST"])
 def add_materiale_conto_lavorazione(ddtnum:int, artnum:int, matnum:int):
@@ -212,7 +218,21 @@ def add_materiale_conto_lavorazione(ddtnum:int, artnum:int, matnum:int):
         Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale, matnum)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
-## Articolo > SaveMaterialeD'Apporto
+
+
+## Articolo > Add Order
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/ordine", methods=["POST"])
+def add_order(ddtnum, artnum):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    
+    numero = request.form['numeroOrdine']
+    quantita = request.form['quantitaOrdine']
+    data = request.form['dataOrdine']
+
+    Articolo.insert_order(artnum, numero, data, quantita)
+
+    return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
 ## Main
 if __name__ == '__main__':

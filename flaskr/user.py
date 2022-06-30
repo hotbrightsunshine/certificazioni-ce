@@ -23,9 +23,6 @@ class User:
         return DB.select_star("testpython.cefsog0f", f"cesgcdfo='{username}'")
     
     def can_saldatura(username:str):
-        print("get soggetti e equipaggiamenti")
-        print(User.get_equipaggiamenti_of_user(username))
-        print(User.get_soggetti_of_user(username))
         try:
             return (len(User.get_soggetti_of_user(username)) > 0) and (len(User.get_equipaggiamenti_of_user(username)) > 0)
         except:

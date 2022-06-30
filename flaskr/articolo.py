@@ -105,16 +105,14 @@ class Articolo:
             DB.update_field("testpython.cefori0f", "ceorcdpar", f"'{codicecomponente}'", f"ceorid={_id}")
         
     def is_apporto_mancante(artnum):
-        #se l'articolo ha la saldatura, controllare che ci sia un materiale d'apporto associato
         sald = DB.select_field("cearsald", "testpython.cefart0f", f"cearid={artnum}")
         is_article_with_saldatura = False
         for record in sald:
             if int(record['CEARSALD']) == 1:
                 is_article_with_saldatura = True
 
-        print("has_saldatura: ", is_article_with_saldatura)
         if not is_article_with_saldatura:
-            return False # Non avendo saldature, non c'è nessun materiale d'apporto mancante.
+            return False
         else:
             ori = DB.select_star("testpython.cefori0f", f"ceoridar={artnum} and ceortpma='A'")
             print("ori: ", ori)
@@ -122,6 +120,21 @@ class Articolo:
                 return True
             else:
                 return False
+
+    def get_orders_of(artnum):
+        return DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
+
+    def get_sum_of_orders(list_of_orders):
+        sum = 0
+        for order in list_of_orders:
+            sum = sum + order['CEOAQTY']
+        return sum
+
+    def insert_order(artnum, numero_ordine, data_ordine, quantita_ordine):
+        DB.execute(f"""INSERT INTO testpython.cefoda0f (ceoaidar, ceoanume, ceoadata, ceoaqty) VALUES
+            ({artnum}, '{numero_ordine}', '{data_ordine}', '{quantita_ordine}')
+        """)
+
 
         
 
