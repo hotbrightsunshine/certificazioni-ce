@@ -7,7 +7,6 @@ class Articolo:
         p= DB.select_field("cearddtid, cearcdpa, cearqty", "testpython.cefart0f", f"cearid={art_num}")
         print(p[0].cearddtid)
         return {
-            
             'id': art_num,
             'idcertificazione': DB.select_field("cearddtid", "cefart0f", f"cearid={art_num}"),
             'codice_interno': DB.select_field("cearcdpa", "cefart0f", f"cearid={art_num}"),
@@ -81,4 +80,10 @@ class Articolo:
     def insert(ddt, codice_interno, quantita, filedic, punzonatura, piegatura, taglio, foratura, saldatura, controlli_visivi, controlli_dimensionali):
         q = f"INSERT INTO testpython.cefart0f (cearddtid, cearcdpa, cearqty, cearpunz, ceartagl, cearfora, cearpieg, cearsald, cearctdi, cearctvi, cearfile, cearata) VALUES ( '{ddt}', '{codice_interno}', {quantita}, {punzonatura}, {taglio}, {foratura}, {piegatura}, {saldatura}, {controlli_visivi}, {controlli_dimensionali}, ' ', ' ')"
         DB.execute(q)
+
+    def update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, num_dop=None, data_dop=None, _id=None):
+        if _id==None:
+            DB.execute(f"INSERT INTO testpython.cefori0f (ceoridar) VALUES ({artnum})")
+
+        
 

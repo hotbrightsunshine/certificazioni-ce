@@ -139,7 +139,7 @@ def articolo(ddtnum:int, artnum:int):
 
 
 ## Articolo > SaveLavorazioni
-@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/lavorazioni", methods=["GET", "POST"])
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/lavorazioni", methods=["POST"])
 def update_lavorazioni_articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
@@ -155,7 +155,7 @@ def update_lavorazioni_articolo(ddtnum:int, artnum:int):
 
 
 ## Articolo > SaveControlli
-@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/controlli", methods=["GET", "POST"])
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/controlli", methods=["POST"])
 def update_controlli(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
@@ -164,6 +164,20 @@ def update_controlli(ddtnum:int, artnum:int):
 
     Articolo.update_controlli(artnum, controlli_dimensionali, controlli_visivi)
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
+
+## Articolo > SaveMaterialeCollaudo
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecollaudo/<int:matnum>", methods=["POST"])
+def update_materiale_collaudo(ddtnum:int, artnum:int, matnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+
+    Articolo.update_materiale_collaudo(artnum, )
+
+    return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
+
+## Articolo > SaveMaterialeContoLavorazione
+
+## Articolo > SaveMaterialeD'Apporto
 
 ## Main
 if __name__ == '__main__':
