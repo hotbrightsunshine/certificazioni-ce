@@ -57,7 +57,7 @@
 </div>
 <div class="col-md-6 col-sm-12 border rounded p-3">
     <div id="controlli">
-        <form action="{{url_for('update_controlli', ddtnum=ddtnum, artnum=artnum)}}" method="post" >
+        <form action="{{url_for('update_controlli', ddtnum=ddtnum, artnum=artnum)}}" method="post">
             <h1>Controlli</h1>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali"
@@ -80,82 +80,110 @@
 </div>
 
 
-
+{% if not isce %}
 <div>
-    <form method="post" action="" id="materiali-form">
-        <h1>Materiali di origine</h1>
-        <div id="aggiunta-materiali row">
-            <select class="form-select" aria-label="Default select example" id="new_materiale">
-                <option value="certificato-collaudo">Materiale con certificato di collaudo</option>
-                <option value="conto-lavorazione">Materiale in conto lavorazione</option>
-                {% if can_saldatura %}
-                <option value="materiale-apporto">Materiale d'origine d'apporto</option>
-                {% endif %}
-            </select>
-        </div>
+    <h1>Materiali di origine</h1>
+    <div id="aggiunta-materiali row">
+        <select class="form-select" aria-label="Default select example" id="new_materiale">
 
-        <div id="form-conto-lavorazione" class="row">
-            <form>
-                <div class="border rounder m-3 p-3">
+            <option value="certificato-collaudo">Materiale con certificato di collaudo</option>
+            <option value="conto-lavorazione">Materiale in conto lavorazione</option>
+            {% if can_saldatura %}
+            <option value="materiale-apporto">Materiale d'origine d'apporto</option>
+            {% endif %}
+        </select>
+    </div>
+
+    <div id="form-conto-lavorazione" class="row">
+        <form method="post"
+            action="{{url_for('add_materiale_conto_lavorazione', ddtnum=ddtnum, artnum=artnum, matnum=0)}}">
+            
+            <div class="border rounder m-3 p-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Tipo di materiale</span>
+            <select class="form-select" aria-label="Default select example" id="tipoMateriale">
+                {% if can_saldatura %}
+                <option value="A">Materiale d'apporto</option>
+                {% endif %}
+                <option value="B">Materiale di base</option>
+              </select>
+            </div>
+
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                </div>
+
+                <div class="row">
+
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
+                        <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
                         <input type="text" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
+                            aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
+                        <button type="submit" class="btn btn-primary">Aggiungi</button>
                     </div>
 
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="form-certificato-collaudo" class="row">
+        <form method="post" action="{{ url_for('add_materiale_collaudo', ddtnum = ddtnum, artnum= artnum, matnum=0) }}">
+        
+                <div class="border rounder m-3 p-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Tipo di materiale</span>
+                <select class="form-select" aria-label="Default select example" id="tipoMateriale">
+                    {% if can_saldatura %}
+                    <option value="A">Materiale d'apporto</option>
+                    {% endif %}
+                    <option value="B">Materiale di base</option>
+                  </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo"
+                        name="certificatoCollaudo">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
+                </div>
+
+                <div class="row">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
                         <input type="text" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
-                    </div>
-
-                    <div class="row">
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input"
-                                   aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
-                            <button type="submit" class="btn btn-primary">Aggiungi</button>
-                        </div>
-
+                            aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                        <button type="submit" class="btn btn-primary">Aggiungi</button>
                     </div>
                 </div>
-            </form>
-        </div>
-
-        <div id="form-certificato-collaudo" class="row">
-            <form>
-                <div class="border rounder m-3 p-3">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo"
-                               name="certificatoCollaudo">
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" id="dataCertificato" name="dataCertificato">
-                    </div>
-
-                    <div class="row">
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input"
-                                   aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
-                            <button type="submit" class="btn btn-primary">Aggiungi</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
+    </div>
     </form>
 </div>
-
+{% endif %}
 
 <div id="lista-materiali">
+    {% for mat in materiali %}
+    <div class="row rounded border">
+        {{mat}}
+    </div>
+    {% endfor %}
 </div>
 
 <div id="ordini">
@@ -188,7 +216,8 @@
             console.log("form certificato di collaudo")
             $("#form-certificato-collaudo").removeClass("d-none");
             $("#form-conto-lavorazione").addClass("d-none");
-        } else {
+        }
+        else{
             console.log("form conto lavorazione")
             $("#form-certificato-collaudo").addClass("d-none");
             $("#form-conto-lavorazione").removeClass("d-none");

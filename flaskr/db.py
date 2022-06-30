@@ -2,22 +2,6 @@ import pyodbc
 import os
 
 class DB:
-
-    table_names = {
-        'ddts': 'cefddt0f',
-        'users': 'cefusr0f',
-        'wps': 'cefwps0f',
-        'articoli': 'cefart0f',
-        'ordini': 'cefoda0f',
-        'origini': 'cefori0f',
-        'pf': 'cefpff0f',
-        'prove_non_distruttive': 'cefpnd0f',
-        'saldature': 'cefsal0f',
-        'soggetti': 'cefsog0f',
-        'wpqr': 'cefwqr0f',
-        'equipaggiamenti': 'cefdev0f'
-    }
-
     def get_connection():
         cnxn = pyodbc.connect('DRIVER={IBM i Access ODBC Driver};SYSTEM=lf;UID='+ os.getenv("DB_USERNAME") +';PWD='+os.getenv("DB_PASSWORD")+';')
         return cnxn
@@ -42,7 +26,7 @@ class DB:
 
 
     def execute(q:str):
-        #print("EXECUTE: ", q)
+        print("EXECUTE: ", q)
         conn = DB.get_connection()
         conn.execute(q)
         conn.commit()
