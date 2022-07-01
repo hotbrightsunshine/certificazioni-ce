@@ -77,25 +77,27 @@
             <label class="input-group-text" for="inputGroupSelect01">Equipaggiamento</label>
             <select class="form-select" id="equip" name="equip" required>
                 {% for equip in equipaggiamento %}
-                <option value="{{equip['CEDVID']}}">{{equip}}</option>
+                <option value="{{equip['CEDVID']}}"
+                {% if saldatura['CESADEID'] == equip['CEDVID'] %} selected {%endif%}>{{equip}}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">Saldatore 1</label>
             <select class="form-select" id="sald1" name="sald1" required>
-                <option>Seleziona un saldatore</option>
                 {% for sald in saldatori %}
-                <option value="{{sald['CESAID']}}">{{sald}}</option>
+                <option value="{{sald['CESGID']}}"
+                {% if saldatura['CESAS1ID'] == sald['CESGID'] %} selected {%endif%}>{{sald}}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">Saldatore 2</label>
             <select class="form-select" id="sald2" name="sald2">
-                <option>Questo campo è opzionale</option>
+                <option value="0">Nessuno</option>
                 {% for sald in saldatori %}
-                <option value="{{sald['CESAID']}}">{{sald}}</option>
+                <option value="{{sald['CESGID']}}" 
+                {% if saldatura['CESAS2ID'] == sald['CESGID'] %} selected {%endif%}>{{sald}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -103,7 +105,8 @@
             <label class="input-group-text" for="inputGroupSelect01">WPS</label>
             <select class="form-select" id="wps" name="wps" required>
                 {% for wps in wpss %}
-                <option value="{{wps['CEWSID']}}">{{wps}}</option>
+                <option value="{{wps['CEWSID']}}"
+                {% if saldatura['CESAWSID'] == wps['CEWSID'] %} selected {%endif%}>{{wps}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -111,16 +114,18 @@
             <label class="input-group-text" for="inputGroupSelect01">WPQR 1</label>
             <select class="form-select" id="wpqr1" name="wpqr1" required>
                 {% for wpqr in wpqrs %}
-                <option value="{{wpqr['CEWRID']}}">{{wpqr}}</option>
+                <option value="{{wpqr['CEWRID']}}"
+                {% if saldatura['CESAR1ID'] == wpqr['CEWRID'] %} selected {%endif%}>{{wpqr}}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">WPQR 2</label>
             <select class="form-select" id="wpqr2" name="wpqr2">
-                <option>Questo campo è opzionale</option>
+                <option value="0">Nessuna</option>
                 {% for wpqr in wpqrs %}
-                <option value="{{wpqr['CEWRID']}}">{{wpqr}}</option>
+                <option value="{{wpqr['CEWRID']}}"
+                {% if saldatura['CESAR2ID'] == wpqr['CEWRID'] %} selected {%endif%}>{{wpqr}}</option>
                 {% endfor %}
             </select>
             <button class="btn btn-primary" type="submit">Salva</button>

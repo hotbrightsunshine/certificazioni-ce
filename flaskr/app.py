@@ -142,6 +142,10 @@ def articolo(ddtnum:int, artnum:int):
     ordini=Articolo.get_orders_of(artnum)
     is_difference_zero=Articolo.is_difference_zero(artnum)
     articolo=Articolo.get(artnum)
+    try:
+        saldatura = DB.select_star("testpython.cefsal0f", f"cesaarid={artnum}")[0]
+    except:
+        saldatura = []
 
 
     equip = DB.select_star("testpython.cefdev0f", f"cedvcdfo='{get_username(session)}'")
@@ -156,6 +160,7 @@ def articolo(ddtnum:int, artnum:int):
         saldatori = sald,
         wpss = wps,
         wpqrs = wpqr,
+        saldatura = saldatura,
         ordini=ordini, err_troppi_articoli=err_troppi_ordini, 
         max_qty=max_ordini, is_difference_zero=is_difference_zero, articolo=articolo)
 
@@ -189,8 +194,8 @@ def update_controlli(ddtnum:int, artnum:int):
 
 
 ## Articolo > SaveMaterialeCollaudo
-@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecollaudo/<int:matnum>", methods=["POST"])
-def add_materiale_collaudo(ddtnum:int, artnum:int, matnum:int):
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecollaudo", methods=["POST"])
+def add_materiale_collaudo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
 
@@ -205,17 +210,15 @@ def add_materiale_collaudo(ddtnum:int, artnum:int, matnum:int):
     dop=Util.bool_to_int(dop)
         
 
-    if matnum==0:
-        Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop)
-    else:
-        Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop, id=matnum)
+
+    Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
 
 ## Articolo > SaveMaterialeContoLavorazione
-@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecontolavorazione/<int:matnum>", methods=["POST"])
-def add_materiale_conto_lavorazione(ddtnum:int, artnum:int, matnum:int):
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/materialecontolavorazione", methods=["POST"])
+def add_materiale_conto_lavorazione(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
 
@@ -224,10 +227,8 @@ def add_materiale_conto_lavorazione(ddtnum:int, artnum:int, matnum:int):
     punzonatura=request.form['punzonatura']
     tipomateriale = request.form['tipoMateriale']
         
-    if matnum==0:
-        Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale)
-    else:
-        Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale, matnum)
+
+    Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
@@ -261,7 +262,34 @@ def set_saldatura(ddtnum, artnum):
     if is_logged(session) == False:
         return redirect(url_for("login"))
 
+    saldatore1 = request.form['sald1']
+    saldatore2 = request.form['sald2']
+
+    equip = request.form['equip']
+    wps = request.form['wps']
+    wpqr1 = request.form['wpqr1']
+    wpqr2 = request.form['wpqr2']
+    if wpqr2 == wpqr1:
+        wpqr2 = 0
+
+    sald = DB.select_star("testpython.cefsal0f", f"cesaarid='{artnum}'")
+    if sald == []:
+        print("Non c'è una saldatura. Creo.")
+        DB.execute(f"""INSERT INTO testpython.cefsal0f (
+            cesaarid, cesas1id, cesas2id, cesar1id, cesar2id, cesawsid,
+            cesadeid, cesaata) VALUES (
+                {artnum}, {saldatore1}, {saldatore2}, 
+                {wpqr1}, {wpqr2}, {wps}, {equip}, ' ')""")
+    else:
+        print("C'è già una saldatura. Modifica.")
+        DB.update_field("testpython.cefsal0f", "cesas1id", f"{saldatore1}", f"cesaarid={artnum}")
+        DB.update_field("testpython.cefsal0f", "cesas2id", f"{saldatore2}", f"cesaarid={artnum}")
+        DB.update_field("testpython.cefsal0f", "cesar1id", f"{wpqr1}", f"cesaarid={artnum}")
+        DB.update_field("testpython.cefsal0f", "cesar2id", f"{wpqr2}", f"cesaarid={artnum}")
+        DB.update_field("testpython.cefsal0f", "cesawsid", f"{wps}", f"cesaarid={artnum}")
+        DB.update_field("testpython.cefsal0f", "cesadeid", f"{equip}", f"cesaarid={artnum}")
     # se c'è già, modifica solo i campi
+
     #altrimenti, creane una
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  

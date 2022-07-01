@@ -27,7 +27,7 @@ class DB:
 
 
     def execute(q:str):
-        #print("EXECUTE: ", q)
+        print("EXECUTE: ", q)
         conn = DB.get_connection()
         conn.execute(q)
         conn.commit()
