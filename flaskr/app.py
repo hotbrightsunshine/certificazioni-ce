@@ -141,12 +141,23 @@ def articolo(ddtnum:int, artnum:int):
     max_ordini = Articolo.get_max_ordini(artnum)
     ordini=Articolo.get_orders_of(artnum)
     is_difference_zero=Articolo.is_difference_zero(artnum)
+    articolo=Articolo.get(artnum)
+
+
+    equip = DB.select_star("testpython.cefdev0f", f"cedvcdfo='{get_username(session)}'")
+    sald = DB.select_star("testpython.cefsog0f", f"cesgcdfo='{get_username(session)}'")
+    wps = DB.select_star("testpython.cefwps0f", f"cewscdfo='{get_username(session)}'")
+    wpqr = DB.select_star("testpython.cefwqr0f", f"cewrcdfo='{get_username(session)}'")
 
     return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, 
         materiali=materiali, isce=isce, can_saldatura=can_saldatura, 
         err_apporto_mancante=err_apporto_mancante, 
+        equipaggiamento = equip,
+        saldatori = sald,
+        wpss = wps,
+        wpqrs = wpqr,
         ordini=ordini, err_troppi_articoli=err_troppi_ordini, 
-        max_qty=max_ordini, is_difference_zero=is_difference_zero)
+        max_qty=max_ordini, is_difference_zero=is_difference_zero, articolo=articolo)
 
 
 ## Articolo > SaveLavorazioni
@@ -244,7 +255,16 @@ def set_quantity(ddtnum, artnum):
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
-#Saldatura, 
+#Saldatura
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/saldatura", methods=["POST"])
+def set_saldatura(ddtnum, artnum):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+
+    # se c'è già, modifica solo i campi
+    #altrimenti, creane una
+
+    return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
 
 ## Main

@@ -9,7 +9,7 @@
 <div class="row p-3">
     <form action="{{url_for('set_quantity', ddtnum=ddtnum, artnum=artnum)}}" method="post">
         <h2>Quantità</h2>
-        <input type="number" name="qty" id="qty" min="1" required>
+        <input type="number" name="qty" id="qty" min="1" required value="{{articolo['CEARQTY']}}">
         <button type="submit">Salva</button>
     </form>
 </div>
@@ -23,7 +23,8 @@
             </div>
             <div class="row">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura"
+                    {% if articolo['CEARPUNZ'] == 1 %} checked {% endif %}>
                     <label class="form-check-label" for="flexCheckDefault">
                         Punzonatura
                     </label>
@@ -31,26 +32,29 @@
                 {% if can_saldatura %}
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" onclick="toggleHide('saldatura')"
-                        id="saldatura-checkbox" name="Saldatura">
+                        id="saldatura-checkbox" name="Saldatura" {% if articolo['CEARSALD'] == 1 %} checked {% endif %}>
                     <label class="form-check-label" for="flexCheckDefault">
                         Saldatura
                     </label>
                 </div>
                 {% endif %}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura"
+                    {% if articolo['CEARPIEG'] == 1 %} checked {% endif %}>
                     <label class="form-check-label" for="flexCheckDefault">
                         Piegatura
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="Taglio" name="Taglio">
+                    <input class="form-check-input" type="checkbox" value="" id="Taglio" name="Taglio"
+                    {% if articolo['CEARTAGL'] == 1 %} checked {% endif %}>
                     <label class="form-check-label" for="flexCheckDefault">
                         Taglio
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura"
+                    {% if articolo['CEARFORA'] == 1 %} checked {% endif %}>
                     <label class="form-check-label" for="flexCheckDefault">
                         Foratura
                     </label>
@@ -68,7 +72,7 @@
 {% if can_saldatura or not is_ce%}
 <div class="rounded border p-3" id="saldatura">
     <h1>Saldatura</h1>
-    <form action="" method="post">
+    <form action="{{url_for('set_saldatura', artnum=artnum, ddtnum=ddtnum)}}" method="post">
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">Equipaggiamento</label>
             <select class="form-select" id="equip" name="equip" required>
@@ -80,6 +84,7 @@
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">Saldatore 1</label>
             <select class="form-select" id="sald1" name="sald1" required>
+                <option>Seleziona un saldatore</option>
                 {% for sald in saldatori %}
                 <option value="{{sald['CESAID']}}">{{sald}}</option>
                 {% endfor %}
@@ -96,15 +101,24 @@
         </div>
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">WPS</label>
-            <select class="form-select" id="inputGroupSelect01" required>
+            <select class="form-select" id="wps" name="wps" required>
                 {% for wps in wpss %}
                 <option value="{{wps['CEWSID']}}">{{wps}}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">WPQR</label>
-            <select class="form-select" id="inputGroupSelect01" required>
+            <label class="input-group-text" for="inputGroupSelect01">WPQR 1</label>
+            <select class="form-select" id="wpqr1" name="wpqr1" required>
+                {% for wpqr in wpqrs %}
+                <option value="{{wpqr['CEWRID']}}">{{wpqr}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">WPQR 2</label>
+            <select class="form-select" id="wpqr2" name="wpqr2">
+                <option>Questo campo è opzionale</option>
                 {% for wpqr in wpqrs %}
                 <option value="{{wpqr['CEWRID']}}">{{wpqr}}</option>
                 {% endfor %}
@@ -120,14 +134,14 @@
             <h1>Controlli</h1>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali"
-                    name="controlli-dimensionali" required>
+                    name="controlli-dimensionali" required {% if articolo['CEARCTDI'] == 1 %} checked {% endif %}>
                 <label class="form-check-label" for="flexCheckDefault">
                     Controlli Dimensionali
                 </label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi"
-                    aria-required="true" required>
+                    aria-required="true" required {% if articolo['CEARCTVI'] == 1 %} checked {% endif %}>
                 <label class="form-check-label" for="flexCheckDefault">
                     Controlli Visivi
                 </label>
@@ -328,7 +342,9 @@
     }
 
     window.onload = function () {
-        $("#saldatura").addClass("d-none");
+        if (! $('#saldatura-checkbox').prop('checked')){
+            $("#saldatura").addClass("d-none");
+        }
         hideFormMateriale();
         wipe();
     }
