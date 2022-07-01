@@ -1,12 +1,22 @@
 {% extends "layout/father.html" %}
 {% block content %}
 {% if err_apporto_mancante and can_saldatura %}
-<h3 style="color:red">Questo articolo è stato lavorato con saldatura, e richiede l'imissione di almeno un materiale di apporto; perfavore inseriscine uno. Se pensi che sia un errore, controlla i campi e correggi.</h3>
+<h3 style="color:red">Questo articolo è stato lavorato con saldatura, e richiede l'imissione di almeno un materiale di
+    apporto; perfavore inseriscine uno. Se pensi che sia un errore, controlla i campi e correggi.</h3>
 {% endif %}
 <a class="btn btn-info mt-3" href="{{url_for('articoli', ddtnum=ddtnum)}}">Torna indietro</a>
+
+<div class="row p-3">
+    <form action="{{url_for('set_quantity', ddtnum=ddtnum, artnum=artnum)}}" method="post">
+        <h2>Quantità</h2>
+        <input type="number" name="qty" id="qty" min="1" required>
+        <button type="submit">Salva</button>
+    </form>
+</div>
+
 <div class="row p-3">
 
-    <div class="col-md-6 col-sm-12 border rounded p-3">
+    <div class="border rounded p-3">
         <form action="{{url_for('update_lavorazioni_articolo', ddtnum=ddtnum, artnum=artnum)}}" method="POST">
             <div class="row">
                 <h1>Lavorazioni</h1>
@@ -20,8 +30,8 @@
                 </div>
                 {% if can_saldatura %}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Saldatura"
-                        onclick="toggleHide('saldatura')">
+                    <input class="form-check-input" type="checkbox" onclick="toggleHide('saldatura')"
+                        id="saldatura-checkbox" name="Saldatura">
                     <label class="form-check-label" for="flexCheckDefault">
                         Saldatura
                     </label>
@@ -46,31 +56,78 @@
                     </label>
                 </div>
 
-                {% if can_saldatura %}
-                <div id="saldatura" class="row border m-3 p-3 form">
-                    <h3>Saldatura</h3>
-                </div>
+
             </div>
-            {% endif %}
+
             <div class="row">
                 <button class="btn-primary btn text-right" type="submit">Salva</button>
             </div>
         </form>
     </div>
 </div>
-<div class="col-md-6 col-sm-12 border rounded p-3">
+{% if can_saldatura or not is_ce%}
+<div class="rounded border p-3" id="saldatura">
+    <h1>Saldatura</h1>
+    <form action="" method="post">
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Equipaggiamento</label>
+            <select class="form-select" id="equip" name="equip" required>
+                {% for equip in equipaggiamento %}
+                <option value="{{equip['CEDVID']}}">{{equip}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Saldatore 1</label>
+            <select class="form-select" id="sald1" name="sald1" required>
+                {% for sald in saldatori %}
+                <option value="{{sald['CESAID']}}">{{sald}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Saldatore 2</label>
+            <select class="form-select" id="sald2" name="sald2">
+                <option>Questo campo è opzionale</option>
+                {% for sald in saldatori %}
+                <option value="{{sald['CESAID']}}">{{sald}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">WPS</label>
+            <select class="form-select" id="inputGroupSelect01" required>
+                {% for wps in wpss %}
+                <option value="{{wps['CEWSID']}}">{{wps}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">WPQR</label>
+            <select class="form-select" id="inputGroupSelect01" required>
+                {% for wpqr in wpqrs %}
+                <option value="{{wpqr['CEWRID']}}">{{wpqr}}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Salva</button>
+        </div>
+    </form>
+</div>
+{% endif %}
+<div class="border rounded p-3">
     <div id="controlli">
         <form action="{{url_for('update_controlli', ddtnum=ddtnum, artnum=artnum)}}" method="post">
             <h1>Controlli</h1>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali"
-                    name="controlli-dimensionali">
+                    name="controlli-dimensionali" required>
                 <label class="form-check-label" for="flexCheckDefault">
                     Controlli Dimensionali
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi">
+                <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi"
+                    aria-required="true" required>
                 <label class="form-check-label" for="flexCheckDefault">
                     Controlli Visivi
                 </label>
@@ -100,7 +157,7 @@
             <div class="border rounder m-3 p-3">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Tipo di materiale</span>
-                    <select class="form-select" name="tipoMateriale" id="tipoMateriale">
+                    <select class="form-select" name="tipoMateriale" id="tipoMateriale" required>
                         {% if can_saldatura %}
                         <option value="A">Materiale d'apporto</option>
                         {% endif %}
@@ -110,13 +167,13 @@
 
 
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Codice del componente</span>
+                    <span class="input-group-text" id="inputGroup-sizing-default" required>Codice del componente</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
                         aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
                 </div>
 
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
+                    <span class="input-group-text" id="inputGroup-sizing-default" required>Numero della colata</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
                         aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
                 </div>
@@ -124,7 +181,7 @@
                 <div class="row">
 
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Punzonatura</span>
+                        <span class="input-group-text" id="inputGroup-sizing-default" required>Punzonatura</span>
                         <input type="text" class="form-control" aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
                         <button type="submit" class="btn btn-primary">Aggiungi</button>
@@ -161,15 +218,15 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
                     <input type="text" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo"
-                        name="certificatoCollaudo">
+                        aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo" name="certificatoCollaudo"
+                        required>
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
                     <input type="date" class="form-control" aria-label="Sizing example input"
                         pattern="\d{4}-\d{2}-\d{2}" aria-describedby="inputGroup-sizing-default" id="dataCertificato"
-                        name="dataCertificato">
+                        name="dataCertificato" required>
 
                 </div>
 
@@ -177,13 +234,23 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
                         <input type="text" class="form-control" aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
+                            aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata" required>
                         <button type="submit" class="btn btn-primary">Aggiungi</button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+    </form>
+</div>
+{% else %}
+<div id="file-upload" class="border p-3">
+    <form action="" method="post">
+        <h1>Upload DOP</h1>
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="file" name="file" required>
+            <button class="btn btn-primary" type="submit">Invia file</button>
+        </div>
     </form>
 </div>
 {% endif %}
@@ -198,32 +265,37 @@
 
 <div id="ordini">
     <form action="{{url_for('add_order', ddtnum=ddtnum, artnum=artnum)}}" method="post">
-    <h1>Ordini</h1>
-    <div class="row rounded border p-3 m-3">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Numero</span>
-            <input type="text" class="form-control" aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default" name="numeroOrdine" id="numeroOrdine">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
-            <input type="date" class="form-control" aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default" name="dataOrdine" id="dataOrdine">
-        </div>
-        <div class="input-group mb-3">
+        <h1>Ordini</h1>
+        {% if err_troppi_articoli %}
+        <h3 style="color:red">Troppi articoli! Controlla i campi e riprova. </h3>
+        {% endif %}
+        <div class="row rounded border p-3 m-3">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Numero</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default" name="numeroOrdine" id="numeroOrdine" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
+                <input type="date" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default" name="dataOrdine" id="dataOrdine" required>
+            </div>
+            <div class="input-group mb-3">
 
-  <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
-  <input type="number" class="form-control" max="{{max_qty}}" name="quantitaOrdine" id="quantitaOrdine">
-  <button class="btn btn-primary" type="submit">Aggiungi</button>
-        </div>
+                <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
+                <input type="number" class="form-control" min="0" max="{{max_qty}}" name="quantitaOrdine"
+                    id="quantitaOrdine" required>
+                <button class="btn btn-primary" type="submit" {% if err_troppi_articoli or is_difference_zero %}
+                    disabled {% endif %}>Aggiungi</button>
+            </div>
 
-    </div>
-</form>
+        </div>
+    </form>
 </div>
 
 <div id="ordini-list">
     {% for ord in ordini %}
-    <div class="row">
+    <div class="row border">
         {{ord}}
     </div>
 
@@ -256,20 +328,18 @@
     }
 
     window.onload = function () {
-
+        $("#saldatura").addClass("d-none");
         hideFormMateriale();
         wipe();
     }
 
     function toggleHide(attr) {
-        console.log("ecco")
+        console.log("ciao")
         if ($("#" + attr).hasClass("d-none")) {
             $("#" + attr).removeClass("d-none")
         } else
             $("#" + attr).addClass("d-none")
     }
-
-    console.log("ciao")
 </script>
 
 {% endblock %}

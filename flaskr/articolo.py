@@ -1,25 +1,12 @@
+from webbrowser import get
 from db import DB
 from util import *
 
 class Articolo:
     def get(art_num):
-        art_num = int(art_num)
-        p= DB.select_field("cearddtid, cearcdpa, cearqty", "testpython.cefart0f", f"cearid={art_num}")
-        print(p[0].cearddtid)
-        return {
-            'id': art_num,
-            'idcertificazione': DB.select_field("cearddtid", "cefart0f", f"cearid={art_num}"),
-            'codice_interno': DB.select_field("cearcdpa", "cefart0f", f"cearid={art_num}"),
-            'quantita': DB.select_field("cearqty", "cefart0f", f"cearid={art_num}"),
-            'punzonatura': Util.int_to_bool(DB.select_field("cearpunz", "cefart0f", f"cearid={art_num}")),
-            'foratura': Util.int_to_bool(DB.select_field("cearfora", "cefart0f", f"cearid={art_num}")),
-            'piegatura': Util.int_to_bool(DB.select_field("cearpieg", "cefart0f", f"cearid={art_num}")),
-            'saldatura': Util.int_to_bool(DB.select_field("cearsald", "cefart0f", f"cearid={art_num}")),
-            'ctrldimensionali': Util.int_to_bool(DB.select_field("cearctdi", "cefart0f", f"cearid={art_num}")),
-            'ctrlvisivi': Util.int_to_bool(DB.select_field("cearctvi", "cefart0f", f"cearid={art_num}")),
-            'file': Util.int_to_bool(DB.select_field("cearfile", "cefart0f", f"cearid={art_num}")),
-            'stato': Util.int_to_bool(DB.select_field("cearata", "cefart0f", f"cearid={art_num}")),
-        }
+        q = DB.select_star("testpython.cefart0f", f"cearid={art_num}")
+        print(q)
+        return q[0]
 
     def get_with_ddt_number(ddtnum):
         articoli = DB.select_star("testpython.cefart0f", f"cearddtid={ddtnum}")
@@ -83,7 +70,6 @@ class Articolo:
         DB.execute(q)
 
     def update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipo_materiale, dop=None, _id=None):
-        print("dop: ",dop)
         if _id==None:
             DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceordopnr, ceorcolnr, ceorcllnr, ceorclldt, ceororig, ceortpma) 
                 VALUES ({artnum}, '{dop}', '{colata}', '{certcollaudo}', '{datacollaudo}', '2', '{tipo_materiale}')""")  
@@ -115,11 +101,21 @@ class Articolo:
             return False
         else:
             ori = DB.select_star("testpython.cefori0f", f"ceoridar={artnum} and ceortpma='A'")
-            print("ori: ", ori)
             if len(ori) == 0:
                 return True
             else:
                 return False
+
+    def are_troppi_articoli(artnum):
+        #se la quantita totale degli articoli è maggiore della quantità dell'articolo > False | True
+        ordlist = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
+        sum = Articolo.get_sum_of_orders(ordlist)
+        totqty = Articolo.get(artnum)['CEARQTY']
+        totqty = int(totqty)
+        if sum > totqty:
+            return True
+        else:
+            return False
 
     def get_orders_of(artnum):
         return DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
@@ -129,6 +125,22 @@ class Articolo:
         for order in list_of_orders:
             sum = sum + order['CEOAQTY']
         return sum
+    
+    def get_max_ordini(artnum):
+        sum_orders = Articolo.get_sum_of_orders(Articolo.get_orders_of(artnum))
+        art_qty = DB.select_field("cearqty", "testpython.cefart0f", f"cearid={artnum}")
+        print(art_qty)
+        max_try = int(art_qty[0]['CEARQTY']) - sum_orders
+        if max_try <= 0:
+            return 0
+        return max_try
+
+    def is_difference_zero(artnum):
+        ordlist = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
+        sum = Articolo.get_sum_of_orders(ordlist)
+        totqty = Articolo.get(artnum)['CEARQTY']
+        totqty = int(totqty)
+        return sum == totqty
 
     def insert_order(artnum, numero_ordine, data_ordine, quantita_ordine):
         DB.execute(f"""INSERT INTO testpython.cefoda0f (ceoaidar, ceoanume, ceoadata, ceoaqty) VALUES

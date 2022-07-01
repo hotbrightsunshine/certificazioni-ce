@@ -44,8 +44,6 @@ def login():
             session['username'] = request.form['username']
             session['certificazione'] = User.is_ce(session['username'])
             return redirect(url_for("index"))
-    print(fetched)
-    print(request.form)
     return render_template('login.html', fetched=fetched,  username=session.get('username'))
 
 
@@ -139,13 +137,16 @@ def articolo(ddtnum:int, artnum:int):
     can_saldatura = User.can_saldatura(session.get('username'))
 
     err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
-
+    err_troppi_ordini = Articolo.are_troppi_articoli(artnum)
+    max_ordini = Articolo.get_max_ordini(artnum)
     ordini=Articolo.get_orders_of(artnum)
-    print("ORDINI: ", ordini)
+    is_difference_zero=Articolo.is_difference_zero(artnum)
 
     return render_template("articolo_view.html", artnum = artnum, ddtnum = ddtnum, 
-        materiali=materiali, isce=isce, can_saldatura=can_saldatura, err_apporto_mancante=err_apporto_mancante, 
-        ordini=ordini)
+        materiali=materiali, isce=isce, can_saldatura=can_saldatura, 
+        err_apporto_mancante=err_apporto_mancante, 
+        ordini=ordini, err_troppi_articoli=err_troppi_ordini, 
+        max_qty=max_ordini, is_difference_zero=is_difference_zero)
 
 
 ## Articolo > SaveLavorazioni
@@ -233,6 +234,18 @@ def add_order(ddtnum, artnum):
     Articolo.insert_order(artnum, numero, data, quantita)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
+
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/quantita", methods=["POST"])
+def set_quantity(ddtnum, artnum):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    
+    DB.update_field("testpython.cefart0f", "cearqty", f"{request.form['qty']}", f"cearid={artnum}")
+
+    return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
+
+#Saldatura, 
+
 
 ## Main
 if __name__ == '__main__':

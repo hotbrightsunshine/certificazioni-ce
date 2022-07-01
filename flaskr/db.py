@@ -23,7 +23,6 @@ class DB:
         results = []
         for row in cursor.fetchall():
             results.append(dict(zip(columns, row)))
-        print(results)
         return results
 
 
