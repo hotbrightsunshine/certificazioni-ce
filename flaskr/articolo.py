@@ -35,7 +35,7 @@ class Articolo:
             matids.append(int(m['CEORID']))
         print("ID MATERIALI: ", matids)
         for m in matids:
-            DB.update_field("testpython.cefori0f", "ceorata", "'r'", f"ceorid={m}")
+            Articolo.delete_materiale(m)
 
         # Elimina tutti i suoi ordini 
         ords = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
