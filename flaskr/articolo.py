@@ -18,6 +18,33 @@ class Articolo:
     def delete(artnum):
         DB.update_field("testpython.cefart0f", "cearata", "'r'", f"cearid={artnum}")
 
+        # Elimina tutte le sue saldature
+        sald = DB.select_star("testpython.cefsal0f", f"cesaarid={artnum}")
+        print ("SALDATURE: ", sald)
+        saldids = []
+        for s in sald:
+            saldids.append(int(s['CESAID']))
+        for s in saldids:
+            DB.update_field("testpython.cefsal0f", "cesaata", "'r'", f"cesaid={s}")
+
+        # Elimina tutti i suoi materiali
+        mat = DB.select_star("testpython.cefori0f", f"ceoridar={artnum}")
+        print ("MATERIALI: ", mat)
+        matids = []
+        for m in mat:
+            matids.append(int(m['CEORID']))
+        print("ID MATERIALI: ", matids)
+        for m in matids:
+            DB.update_field("testpython.cefori0f", "ceorata", "'r'", f"ceorid={m}")
+
+        # Elimina tutti i suoi ordini 
+        ords = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
+        ordids = []
+        for o in ords:
+            ordids.append(int(o['CEOAID']))
+        for m in matids:
+            DB.update_field("testpython.cefori0f", "ceorata", "'r'", f"ceorid={m}")
+
     # Aggiorna le lavorazioni di un articolo
     def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
         taglio = Util.bool_to_int(taglio)

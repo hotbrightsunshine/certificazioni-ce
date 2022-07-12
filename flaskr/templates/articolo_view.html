@@ -276,8 +276,18 @@
 
 <div id="lista-materiali">
     {% for mat in materiali %}
-    <div class="row rounded border">
-        {{mat}}
+    <div class="row rounded border my-3">
+        {% if mat['CEORORIG'] == '1' %}
+            <h2>Materiale in conto lavorazione</h2>
+            <p>Codice componente: {{mat['CEORCDPAR']}}</p>
+            <p>Numero della colata: {{mat['CEORCOLNR']}}</p>
+            <p>Punzonatura: {{mat['CEORPUNNR']}}</p>
+        {% else %}
+            <h2>Materiale con certificato di collaudo</h2>
+            <p>Certificato di collaudo: {{mat['CEORCLLNR']}}</p>
+            <p>Data: {{mat['CEORCLLDT']}}</p>
+            <p>Numero della colata: {{mat['CEORCOLNR']}}</p>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
@@ -314,8 +324,10 @@
 
 <div id="ordini-list">
     {% for ord in ordini %}
-    <div class="row border">
-        {{ord}}
+    <div class="row border my-3">
+        <p>Numero ordine: {{ord['CEOANUME']}}</p>
+        <p>Data: {{ord['CEOADATA']}}</p>
+        <p>Quantità: {{ord['CEOAQTY']}}</p>
     </div>
 
     {% endfor %}
