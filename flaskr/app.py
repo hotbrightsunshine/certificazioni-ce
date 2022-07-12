@@ -66,7 +66,6 @@ def index():
     return render_template('index.html', username = username, login = login, ddtlist=ddtlist)
 
 
-
 ## DTT Form 
 @app.route("/newddt", methods=["POST", "GET"])
 def newddt():
