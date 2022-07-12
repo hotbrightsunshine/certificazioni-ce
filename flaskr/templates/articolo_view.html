@@ -329,7 +329,7 @@
         <p>Data: {{ord['CEOADATA']}}</p>
         <p>Quantità: {{ord['CEOAQTY']}}</p>
         {{ord}}
-        <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}" class="btn btn-danger"></a>
+        <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}" class="btn btn-danger">Elimina/a>
     </div>
 
     {% endfor %}
