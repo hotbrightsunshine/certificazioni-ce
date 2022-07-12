@@ -1,2 +1,16 @@
 * Certificazioni CE
-  Certificazioni CE è un sito WEB che serve per la gestione dei DDT dei clienti di una azienda.
+  Certificazioni CE è un sito WEB che aiuta i fornitori a inviare i propri DDT all'azienda, e agli addetti al magazzino ad associargli una posizione. 
+  ** Descrizione
+  Il progetto è stato scritto interamente in Python, utilizzando il micro-framework Flask per gestire la logica, e il Jinja Template Engine per i template. 
+  Le documentazioni ufficiali si trovano a questi indirizzi:
+  + https://jinja.palletsprojects.com/en/3.1.x/
+  + https://flask.palletsprojects.com/en/2.1.x/
+
+  ** Stato del progetto
+  Il progetto non si trova in uno stato di completezza. Di seguito, vengono inserite le feature che servono ad una finalizzazione approssimativa del sito. 
+  + Gestione di più tipi di utenti. Fino ad adesso, solo il ruolo di fornitore è stato scritto. 
+  + Redirect ottimizzati per una maggiore semplicità d'uso.
+  + Stilizzazione del sito per renderlo piacevole esteticamente.
+  + Ottimizzazione delle query eseguite per il rendering della pagina all'indirizzo \/ddt/-/article/- 
+  (con il trattino ~-~ vengono indicati i valori che possono variare).
+  
