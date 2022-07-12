@@ -42,8 +42,8 @@ class Articolo:
         ordids = []
         for o in ords:
             ordids.append(int(o['CEOAID']))
-        for m in matids:
-            DB.update_field("testpython.cefori0f", "ceorata", "'r'", f"ceorid={m}")
+        for o in ordids:
+            Articolo.delete_ordine(o)
 
     # Aggiorna le lavorazioni di un articolo
     def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
@@ -149,7 +149,7 @@ class Articolo:
     # Controlla se gli ordini di un articolo sono troppi
     def are_troppi_ordini(artnum):
         #se la quantita totale degli articoli è maggiore della quantità dell'articolo > False | True
-        ordlist = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
+        ordlist = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum} AND CEOAATA=' '")
         sum = Articolo.get_sum_of_orders(ordlist)
         totqty = Articolo.get(artnum)['CEARQTY']
         totqty = int(totqty)
@@ -160,7 +160,7 @@ class Articolo:
 
     # Ritorna gli ordini di un articoli
     def get_orders_of(artnum):
-        return DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
+        return DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum} AND CEOAATA=' '")
 
     # Ritorna la somma degli ordini di un articolo
     def get_sum_of_orders(list_of_orders):
@@ -192,6 +192,9 @@ class Articolo:
         DB.execute(f"""INSERT INTO testpython.cefoda0f (ceoaidar, ceoanume, ceoadata, ceoaqty) VALUES
             ({artnum}, '{numero_ordine}', '{data_ordine}', '{quantita_ordine}')
         """)
+    
+    def delete_ordine(ordnum):
+        DB.update_field("testpython.cefoda0f", "ceoaata", "'r'", f"ceoaid='{ordnum}'")
 
 
         

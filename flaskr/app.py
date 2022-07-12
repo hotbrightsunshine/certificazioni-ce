@@ -299,6 +299,16 @@ def set_saldatura(ddtnum, artnum):
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
 
+## Delete Ordine
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/deleteordine/<int:ordnum>", methods=['POST', "GET"])
+def delete_ordine(ddtnum:int, artnum:int, ordnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    Articolo.delete_ordine(ordnum)
+    return redirect(url_for("articolo", artnum=artnum, ddtnum=ddtnum))
+
+
+
 ## Main
 if __name__ == '__main__':
     app.run(host='192.168.219.129', port=5000, debug=True, threaded=False)
