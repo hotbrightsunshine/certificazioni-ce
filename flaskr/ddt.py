@@ -1,6 +1,7 @@
 from db import DB
 
 class DDT:
+    # Ritorna la lista di tutti i documenti di trasporto di un utente
     def get_of_username(username:str, num=None):
         if num == None:
             q = DB.select_star(f"testpython.cefddt0f", f"cedtidus='{username}' AND cedtata=' '")
@@ -9,9 +10,11 @@ class DDT:
             q = DB.select_star(f"testpython.CEFDDT0f", f"cedtidus='{username}' AND CEDTID={num} AND cedtata=' '")
             return q[0]
 
+    # Rimuove un DDT
     def remove(num:int):
         DB.update_field("testpython.cefddt0f", "cedtata", "'r'", f"cedtid={num}")
 
+    # Ritorna un dizionario di valori dato un array 
     def get_ddt_from_record(ddt):
         dict_ddt = {
             'id' : int(ddt[0]),
@@ -23,13 +26,14 @@ class DDT:
         }
         return dict_ddt
 
-
+    # Ritorna una lista di dizionari dato un array di array
     def get_ddts_from_records(ddts):
         ddtlist = []
         for ddt in ddts:
             ddtlist.append(DDT.get_ddt_from_record(ddt))
         return ddtlist
 
+    # Inserisce un nuovo DDT 
     def insert(date, fornitore, numddt, dataddt):
         q = f"""insert into testpython.cefddt0f (
         cedtcedt,

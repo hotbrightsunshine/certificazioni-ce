@@ -3,18 +3,22 @@ from db import DB
 from util import *
 
 class Articolo:
+    # Ritorna l'articolo dato il suo ID 
     def get(art_num):
         q = DB.select_star("testpython.cefart0f", f"cearid={art_num} AND cearata=' '")
         print(q)
         return q[0]
 
+    # Ritorna gli articoli dato il suo DDT
     def get_with_ddt_number(ddtnum):
         articoli = DB.select_star("testpython.cefart0f", f"cearddtid={ddtnum} AND cearata=' '")
         return articoli
 
+    # Elimina un articolo
     def delete(artnum):
         DB.update_field("testpython.cefart0f", "cearata", "'r'", f"cearid={artnum}")
 
+    # Aggiorna le lavorazioni di un articolo
     def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
         taglio = Util.bool_to_int(taglio)
         punzonatura = Util.bool_to_int(punzonatura)
@@ -27,18 +31,21 @@ class Articolo:
         DB.update_field("testpython.cefart0f", "cearpieg", f"'{piegatura}'", f"cearid={artnum}")
         DB.update_field("testpython.cefart0f", "cearsald", f"'{saldatura}'", f"cearid={artnum}")
 
+    # Aggiorna i controlli di un articolo
     def update_controlli(artnum, controlli_dimensionali, controlli_visivi):
         controlli_dimensionali = Util.bool_to_int(controlli_dimensionali)
         controlli_visivi = Util.bool_to_int(controlli_visivi)
         DB.update_field("testpython.cefart0f", "cearctdi", controlli_dimensionali, f"cearid={artnum}")
         DB.update_field("testpython.cefart0f", "cearctvi", controlli_visivi, f"cearid={artnum}")
 
+    # Traduce una lista di articoli in una lista di hashmap
     def get_list(artlist):
         diclist = []
         for art in artlist:
             diclist.append(Articolo.get(art))
         return diclist
 
+    # Prende la richiesta POST e il numero DDT e inserisce nel database un record. (Andrebbe migliorato...)
     def get_and_insert(request, ddtnum):
         def it_or_false(req):
             if req in request.form:
@@ -67,11 +74,13 @@ class Articolo:
             controlli_visivi=Util.bool_to_int(controlli_visivi),
             controlli_dimensionali=Util.bool_to_int(controlli_dimensionali))
 
+    # Inserisce all'interno del database l'articolo dati i suoi campi
     def insert(ddt, codice_interno, quantita, filedic, punzonatura, piegatura, taglio, foratura, saldatura, controlli_visivi, controlli_dimensionali):
         q = f"""INSERT INTO testpython.cefart0f (cearddtid, cearcdpa, cearqty, cearpunz, ceartagl, cearfora, cearpieg, cearsald, cearctdi, cearctvi, cearfile, cearata)
          VALUES ( '{ddt}', '{codice_interno}', {quantita}, {punzonatura}, {taglio}, {foratura}, {piegatura}, {saldatura}, {controlli_visivi}, {controlli_dimensionali}, ' ', ' ')"""
         DB.execute(q)
 
+    # Aggiorna i materiali con certificato di collaudo di un articolo
     def update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipo_materiale, dop=None, _id=None):
         if _id==None:
             DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceordopnr, ceorcolnr, ceorcllnr, ceorclldt, ceororig, ceortpma) 
@@ -82,7 +91,7 @@ class Articolo:
             DB.update_field("testpython.cefori0f", "ceorcllnr", f"'{certcollaudo}'", f"ceorid={_id}")
             DB.update_field("testpython.cefori0f", "ceorclldt", f"'{datacollaudo}'", f"ceorid={_id}")
 
-
+    # Aggiorna i materiali in conto lavorazione di un articolo
     def update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipo_materiale, dop=None, _id=None):
         if _id==None:
             DB.execute(f"""INSERT INTO testpython.cefori0f (ceoridar, ceorcdpar, ceorcolnr, ceorpunnr, ceororig, ceortpma) VALUES (
@@ -93,6 +102,7 @@ class Articolo:
             DB.update_field("testpython.cefori0f", "ceorpunnr", f"'{punzonatura}'", f"ceorid={_id}")
             DB.update_field("testpython.cefori0f", "ceorcdpar", f"'{codicecomponente}'", f"ceorid={_id}")
         
+    # Controlla se manca il materiale d'apporto
     def is_apporto_mancante(artnum):
         sald = DB.select_field("cearsald", "testpython.cefart0f", f"cearid={artnum}")
         is_article_with_saldatura = False
@@ -108,8 +118,9 @@ class Articolo:
                 return True
             else:
                 return False
-
-    def are_troppi_articoli(artnum):
+    
+    # Controlla se gli ordini di un articolo sono troppi
+    def are_troppi_ordini(artnum):
         #se la quantita totale degli articoli è maggiore della quantità dell'articolo > False | True
         ordlist = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
         sum = Articolo.get_sum_of_orders(ordlist)
@@ -120,15 +131,18 @@ class Articolo:
         else:
             return False
 
+    # Ritorna gli ordini di un articoli
     def get_orders_of(artnum):
         return DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
 
+    # Ritorna la somma degli ordini di un articolo
     def get_sum_of_orders(list_of_orders):
         sum = 0
         for order in list_of_orders:
             sum = sum + order['CEOAQTY']
         return sum
     
+    # Ritorna il massimo numero di ordini
     def get_max_ordini(artnum):
         sum_orders = Articolo.get_sum_of_orders(Articolo.get_orders_of(artnum))
         art_qty = DB.select_field("cearqty", "testpython.cefart0f", f"cearid={artnum}")
@@ -138,6 +152,7 @@ class Articolo:
             return 0
         return max_try
 
+    # Controlla se il numero di ordini massimo è uguale al numero di ordini messi dall'utente
     def is_difference_zero(artnum):
         ordlist = DB.select_star("testpython.cefoda0f", f"ceoaidar={artnum}")
         sum = Articolo.get_sum_of_orders(ordlist)
@@ -145,6 +160,7 @@ class Articolo:
         totqty = int(totqty)
         return sum == totqty
 
+    # Inserisce un nuovo ordine
     def insert_order(artnum, numero_ordine, data_ordine, quantita_ordine):
         DB.execute(f"""INSERT INTO testpython.cefoda0f (ceoaidar, ceoanume, ceoadata, ceoaqty) VALUES
             ({artnum}, '{numero_ordine}', '{data_ordine}', '{quantita_ordine}')

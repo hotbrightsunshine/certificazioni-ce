@@ -9,13 +9,14 @@ from articolo import Articolo
 from util import Util
 from user import User
 
+# Controlla che l'utente sia loggato
 def is_logged(session):
     try:
         return session['login'] == 'ok'
     except:
         return False
 
-
+# Ritorna l'username dell'utente
 def get_username(session):
     if is_logged(session):
         return session['username']
@@ -23,7 +24,7 @@ def get_username(session):
         return None
 
 
-## Flask App iniprint(tialization
+## Flask App: Inizializzazione
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET")
 
@@ -125,6 +126,7 @@ def newarticolo(ddtnum:int):
         return redirect(url_for("login"))
     return render_template("new_article.html", ddtnum = ddtnum)
 
+
 ## Delete Articolo
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/delete")
 def delete_articolo(ddtnum:int, artnum:int):
@@ -132,6 +134,7 @@ def delete_articolo(ddtnum:int, artnum:int):
         return redirect(url_for("login"))
     Articolo.delete(artnum)
     return redirect(url_for("articoli", ddtnum=ddtnum))
+
 
 ## Articolo Detailed View
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>")
@@ -143,7 +146,7 @@ def articolo(ddtnum:int, artnum:int):
     can_saldatura = User.can_saldatura(session.get('username'))
 
     err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
-    err_troppi_ordini = Articolo.are_troppi_articoli(artnum)
+    err_troppi_ordini = Articolo.are_troppi_ordini(artnum)
     max_ordini = Articolo.get_max_ordini(artnum)
     ordini=Articolo.get_orders_of(artnum)
     is_difference_zero=Articolo.is_difference_zero(artnum)
@@ -152,7 +155,6 @@ def articolo(ddtnum:int, artnum:int):
         saldatura = DB.select_star("testpython.cefsal0f", f"cesaarid={artnum}")[0]
     except:
         saldatura = []
-
 
     equip = DB.select_star("testpython.cefdev0f", f"cedvcdfo='{get_username(session)}'")
     sald = DB.select_star("testpython.cefsog0f", f"cesgcdfo='{get_username(session)}'")
@@ -211,12 +213,9 @@ def add_materiale_collaudo(ddtnum:int, artnum:int):
 
     tipomateriale = request.form['tipoMateriale2']
 
-
     dop=Util.it_or_false(request.form, "dop")
     dop=Util.bool_to_int(dop)
-        
-
-
+    
     Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
@@ -253,6 +252,7 @@ def add_order(ddtnum, artnum):
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
+
 # Quantità
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/quantita", methods=["POST"])
 def set_quantity(ddtnum, artnum):
@@ -262,6 +262,7 @@ def set_quantity(ddtnum, artnum):
     DB.update_field("testpython.cefart0f", "cearqty", f"{request.form['qty']}", f"cearid={artnum}")
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
+
 
 #Saldatura
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/saldatura", methods=["POST"])
@@ -295,10 +296,6 @@ def set_saldatura(ddtnum, artnum):
         DB.update_field("testpython.cefsal0f", "cesar2id", f"{wpqr2}", f"cesaarid={artnum}")
         DB.update_field("testpython.cefsal0f", "cesawsid", f"{wps}", f"cesaarid={artnum}")
         DB.update_field("testpython.cefsal0f", "cesadeid", f"{equip}", f"cesaarid={artnum}")
-    # se c'è già, modifica solo i campi
-
-    #altrimenti, creane una
-
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
 
