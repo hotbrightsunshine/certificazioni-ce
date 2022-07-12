@@ -16,7 +16,9 @@
   + Eliminazione dei record /ricorsiva/: Se, ad esempio, viene eliminato un documento di trasporto, i suoi articoli non devono poter essere visibili
     all'utente. 
   + Eliminazione degli ordini, articoli, e altri elementi. Fino ad adesso, solo l'eliminazione dei documenti di trasporto e degli articoli è stata scritta.
-  + Modifica dei dati: deve essere possibile modificare dei campi di un elemento dal lato utente. 
+  + Modifica dei dati: deve essere possibile modificare dei campi di un elemento dal lato utente;
+  + Upload del file DOP per utenti CE;
+  + Creazione di un PDF dato il documento di trasporto di un utente.
 
 ** Struttura del progetto
   Il progetto è stato volutamente strutturato senza classi ed oggetti per semplificarlo e rimuovere astrazioni superflue. 
