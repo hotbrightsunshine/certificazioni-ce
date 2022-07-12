@@ -1,3 +1,4 @@
+from articolo import Articolo
 from db import DB
 
 class DDT:
@@ -13,6 +14,14 @@ class DDT:
     # Rimuove un DDT
     def remove(num:int):
         DB.update_field("testpython.cefddt0f", "cedtata", "'r'", f"cedtid={num}")
+
+        # Elimina tutti i suoi Articoli
+        arts = DB.select_star("testpython.cefart0f", f"cearddtid={num}")
+        artids = []
+        for a in arts:
+            artids.append(int(a["CEARID"]))
+        for a in artids:
+            Articolo.delete(a)
 
     # Ritorna un dizionario di valori dato un array 
     def get_ddt_from_record(ddt):
