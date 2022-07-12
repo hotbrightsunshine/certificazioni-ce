@@ -11,6 +11,6 @@
   + Gestione di più tipi di utenti. Fino ad adesso, solo il ruolo di fornitore è stato scritto. 
   + Redirect ottimizzati per una maggiore semplicità d'uso.
   + Stilizzazione del sito per renderlo piacevole esteticamente.
-  + Ottimizzazione delle query eseguite per il rendering della pagina all'indirizzo \/ddt/-/article/- 
+  + Ottimizzazione delle query eseguite per il rendering della pagina all'indirizzo ~/ddt/-/article/-~
     (con il trattino ~-~ vengono indicati i valori che possono variare).
   
