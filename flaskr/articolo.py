@@ -193,8 +193,13 @@ class Articolo:
             ({artnum}, '{numero_ordine}', '{data_ordine}', '{quantita_ordine}')
         """)
     
+    # Elimina un ordine
     def delete_ordine(ordnum):
         DB.update_field("testpython.cefoda0f", "ceoaata", "'r'", f"ceoaid='{ordnum}'")
+
+    # Elimina un materiale
+    def delete_materiale(matnum):
+        DB.update_field("testpython.cefori0f", "ceorata", "'r'", f"ceorid='{matnum}'")
 
 
         

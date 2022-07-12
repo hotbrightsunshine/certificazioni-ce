@@ -280,14 +280,14 @@
         {% if mat['CEORORIG'] == '1' %}
             <h2>Materiale in conto lavorazione</h2>
             <p>Codice componente: {{mat['CEORCDPAR']}}</p>
-            <p>Numero della colata: {{mat['CEORCOLNR']}}</p>
             <p>Punzonatura: {{mat['CEORPUNNR']}}</p>
         {% else %}
             <h2>Materiale con certificato di collaudo</h2>
             <p>Certificato di collaudo: {{mat['CEORCLLNR']}}</p>
             <p>Data: {{mat['CEORCLLDT']}}</p>
-            <p>Numero della colata: {{mat['CEORCOLNR']}}</p>
         {% endif %}
+        <p>Numero della colata: {{mat['CEORCOLNR']}}</p>
+        <a href="{{url_for('delete_materiale', matnum=mat['CEORID'], artnum=artnum, ddtnum=ddtnum)}}" class="btn btn-danger">Elimina</a>
     </div>
     {% endfor %}
 </div>
@@ -329,7 +329,7 @@
         <p>Data: {{ord['CEOADATA']}}</p>
         <p>Quantità: {{ord['CEOAQTY']}}</p>
         {{ord}}
-        <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}" class="btn btn-danger">Elimina/a>
+        <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}" class="btn btn-danger">Elimina</a>
     </div>
 
     {% endfor %}

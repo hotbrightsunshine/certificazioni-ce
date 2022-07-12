@@ -141,7 +141,7 @@ def delete_articolo(ddtnum:int, artnum:int):
 def articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
-    materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}'")
+    materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}' AND ceorata = ' '")
     isce = User.is_ce(session.get('username'))
     can_saldatura = User.can_saldatura(session.get('username'))
 
@@ -308,6 +308,13 @@ def delete_ordine(ddtnum:int, artnum:int, ordnum:int):
     return redirect(url_for("articolo", artnum=artnum, ddtnum=ddtnum))
 
 
+## Delete Materiale
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/deletemateriale/<int:matnum>", methods=['POST', "GET"])
+def delete_materiale(ddtnum:int, artnum:int, matnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    Articolo.delete_materiale(matnum)
+    return redirect(url_for("articolo", artnum=artnum, ddtnum=ddtnum))
 
 ## Main
 if __name__ == '__main__':
