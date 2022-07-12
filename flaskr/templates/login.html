@@ -1,10 +1,31 @@
 {% extends "layout/father.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}Esegui il login{% endblock %}
 
 {% block content %}
+
+<form class="box" method="POST">
+  <div class="field">
+    <label class="label">Codice Utente</label>
+    <div class="control">
+      <input class="input" type="text" placeholder="" name="username">
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Password</label>
+    <div class="control">
+      <input class="input" type="password" placeholder="********" name="password">
+    </div>
+  </div>
+
+  <button class="button is-primary" type="submit">Login</button>
+</form>
+
+
+
+
 <form method="POST">
   <div class="row p-3">
-    
     <h1>Login</h1>
   </div>
   <div class="input-group mb-3">

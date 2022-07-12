@@ -1,34 +1,23 @@
 {% extends "layout/father.html" %}
+{% block title %}Nuovo articolo{% endblock %}
 {% block content %}
-<div class="container">
-  <div class="row p-3">
-    <h1>Aggiungi un nuovo articolo per il DDT n. {{ddtnum}}</h1>
-  </div>
-  <div class="container">
-    <form method = "post" action="{{url_for('articoli', ddtnum = ddtnum)}}">
-    <div class="row border p-3">
 
-        <h3>Dati generali</h3>
-        
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Codice Interno</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="codice-interno">
-        </div>
-        
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Quantità</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="quantita">
-        </div>
+<form class="box" method="POST" action="{{url_for('articoli', ddtnum = ddtnum)}}">
 
+  <div class="field">
+    <label class="label">Codice interno</label>
+    <div class="control">
+      <input class="input" type="text" name="codice-interno" required>
     </div>
-    <div class="row">
-      <button class="btn btn-success my-2" action="submit">Invia dati</button>
-    </div>
-    <div class="row">
-      <a class="btn btn-primary my-1" href="{{url_for('articoli', ddtnum=ddtnum)}}">Annulla</a>
-    </div>
-    </form>
   </div>
-</div>
+  <div class="field">
+    <label class="label">Quantità</label>
+    <div class="control">
+      <input class="input" type="number" name="quantita" required>
+    </div>
+  </div>
+  <button class="button is-primary" type="submit">Compila</button>
+  <a href="{{url_for('articoli', ddtnum=ddtnum)}}" class="button is-primary is-light">Torna Indietro</a>
+</form>
 
 {% endblock %}

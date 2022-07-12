@@ -1,47 +1,63 @@
 {% extends "layout/father.html" %}
-{% block title %} DDT n. {{ddt['numero']}} {% endblock%}
+{% block title %} DDT n. {{ddt['CEDTDDTNR']}} {% endblock%}
 {% block content %}
-<br>
-<h1>DDT n. {{ddt['numero']}}</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Campo</th>
-      <th scope="col">Valore</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">ID</th>
-      <td>{{ddt['CEDTID']}}</td>
-    </tr>
-    <tr>
-      <th scope="row">Data Certificazione</th>
-      <td>{{ddt['CEDTCEDT']}}</td>
-    </tr>
-    <tr>
-      <th scope="row">Fornitore</th>
+<div class="columns">
+  <div class="column">
+    <div class="box">
+      <table class="table is-fullwidth">
+        <thead>
+          <th>Campo</th>
+          <th>Valore</th>
+        </thead>
+        <tr>
+          <td>Data della Certificazione</td>
+          <td>{{ddt['CEDTCEDT']}}</td>
+        </tr>
+        <tr>
+          <td>Fornitore</td>
+          <td>{{ddt['CEDTIDUS']}}</td>
+        </tr>
+        <tr>
+          <td>Data DDT</td>
+          <td>{{ddt['CEDTDDTDT']}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="column">
 
-      <td>{{ddt['CEDTIDUS']}}</td>
-    </tr>
-    <tr>
-      <th scope="row">Numero DDT</th>
-      <td>{{ddt['CEDTDDTNR']}}</td>
-    </tr>
-    <tr>
-      <th scope="row">Data DDT</th>
-      <td>{{ddt['CEDTDDTDT']}}</td>
-    </tr>
-  </tbody>
-</table>
+    <div class="columns">
+      <div class="column">
+        <a class="button is-danger is-fullwidth" href="">Elimina DDT</a>
+      </div>
+      <div class="column">
+        <a class="button is-primary is-fullwidth" href="">Modifica DDT</a>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <a class="button is-info is-fullwidth" href="{{url_for('articoli', ddtnum=ddt['CEDTID'])}}">Aggiungi articoli</a>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <a class="button is-info is-fullwidth is-light" href="{{url_for('index')}}">Torna indietro</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <div class="d-flex justify-content-around">
 
-    <a class="btn btn-primary" href="{{url_for('index')}}">Torna indietro</a>
-    <a class="btn btn-danger" href="">Elimina DDT</a>
-    <a class="btn btn-primary" href="">Modifica DDT</a>
-    <a class="btn btn-primary" href="{{url_for('articoli', ddtnum=ddt['CEDTID'])}}">Aggiungi articoli</a>
+  
+
+
+  
 
 </div>
 

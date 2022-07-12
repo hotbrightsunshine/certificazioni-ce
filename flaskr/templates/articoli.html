@@ -1,33 +1,49 @@
 {% extends "layout/father.html" %}
-{% block title %}Inserisci articoli{% endblock %}
+{% block title %}Articoli del DDT n. {{ddtnum}} {% endblock %}
+
+{% block bar %}
+<div class="columns">
+  <div class="column">
+    <div class="columns">
+      <div class="column">
+        <a class="button is-primary is-fullwidth" href="{{url_for('newarticolo', ddtnum = ddtnum)}}">Nuovo articolo</a>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <a class="button is-light is-primary is-fullwidth" href="{{url_for('ddt', ddtnum = ddtnum)}}">Indietro</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<div class="row p-3">
-  <div class="col-md-8"><h1>Articoli del DDT n. {{ddtnum}}</h1></div>
-  <div class="col-md-2">
-    <a class="btn btn-success" href="{{url_for('newarticolo', ddtnum = ddtnum)}}">Nuovo articolo</a></div>
-  <div class="col-md-2">
-    <a class="btn btn-primary" href="{{url_for('ddt', ddtnum = ddtnum)}}">Indietro</a>
+{% for art in articles %}
+
+<div class="box">
+  <div class="columns is-flex is-vcentered">
+    <div class="column">
+      <p><strong>Codice dell'Articolo:</strong> {{art['CEARCDPA']}}</p>
+      <p><strong>Quantità:</strong> {{art['CEARQTY']}}</p> 
+    </div>
+    <div class="column is-one-fifth has-text-centered">
+      <div class="columns">
+        <div class="column">
+          <a class="button is-primary" href="{{url_for('articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Modifica</a>
+        </div>
+        <div class="column">
+          <a class="button is-danger" href="{{url_for('delete_articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Elimina</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="container">
 
-  {% for art in articles %}
-  <div class="row border p-3 m-3 rounded">
-    <div class="col-md-8">
-      <p>Codice Articolo: {{art['CEARCDPA']}}</p>
-      <p>Quantità: {{art['CEARQTY']}}</p> 
-    </div>
-    <div class="col-md-2">
-      <a class="btn btn-danger" href="{{url_for('delete_articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Elimina</a>
-    </div>
-    <div class="col-md-2">
-      <a class="btn btn-primary" href="{{url_for('articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Modifica</a>
-    </div>
-  </div>
-  {% endfor %}
 
-</div>
-<div>
-  {%endblock%}
+  
+
+{% endfor %}
+{%endblock%}

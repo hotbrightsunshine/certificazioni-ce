@@ -1,38 +1,34 @@
 {% extends "layout/father.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}I tuoi DDT{% endblock %}
+
+{% block bar %}
+<a href=" {{ url_for('newddt') }} " class="button is-pulled-right is-primary">Compila un nuovo DDT</a>
+{% endblock %}
 
 {% block content %}
 {% if login %}
 
-
-
-
-
-<br>
-<div class="row p-3">
-  <div class="col-md-10 col-sm-12">
-    <h1>I tuoi DDT</h1>
-  </div>
-  <div class="col-md-2 col-sm-12">
-    <a href=" {{ url_for('newddt') }} " class="btn btn-success">Compila un nuovo DDT</a>
-  </div>
-</div>
-
-
-<!-- DDT List-->
-
-<div class="container">
   {% for ddt in ddtlist %}
-  <div class="border p-3 row m-3 rounded row-data">
-    <div class="col-md-8 col-sm-12"> 
-      <p>Numero DDT: {{ddt['CEDTDDTNR']}}</p>
-      <p>Data certificazione: {{ddt['CEDTCEDT']}}</p> 
-      <p>Data DDT: {{ddt['CEDTDDTDT']}}</p> 
+  <div class="box">
+    <div class="columns  is-flex is-vcentered">
+      <div class="column">
+        <p><strong>Numero DDT:</strong> {{ddt['CEDTDDTNR']}}</p>
+        <p><strong>Data certificazione:</strong> {{ddt['CEDTCEDT']}}</p> 
+        <p><strong>Data DDT: </strong>{{ddt['CEDTDDTDT']}}</p> 
+      </div>
+      <div class="column is-one-fifth has-text-centered">
+        <div class="columns">
+          <div class="column">
+            <a class="button is-primary is-fullwidth" href="{{url_for('ddt', ddtnum=ddt['CEDTID'])}}">Modifica</a>
+          </div>
+          <div class="column">
+            <a class="button is-danger is-fullwidth" href="{{url_for('removeddt', ddtnum = ddt['CEDTID'])}}">Elimina</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-md-2 col-sm-12"><a class="btn btn-danger" href="{{url_for('removeddt', ddtnum=ddt['CEDTID'])}}">Elimina</a></div>
-    <div class="col-md-2 col-sm-12"><a class="btn btn-primary" href="{{url_for('ddt', ddtnum=ddt['CEDTID'])}}">Modifica</a></div>
   </div>
   {% endfor %}
-</div>
+
 {% endif %} 
 {% endblock %}

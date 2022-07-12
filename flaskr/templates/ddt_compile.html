@@ -1,26 +1,31 @@
 {% extends "layout/father.html" %}
-{% block title %}Compila DDT{% endblock %}
+{% block title %}Compila un nuovo DDT{% endblock %}
 
 {% block content %}
-<form method="post">
-  <div class="input-group mb-3">
-  <span class="input-group-text" id="inputGroup-sizing-default">Data Certificazione</span>
-  <input id="datacert" name="datacert" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-</div>
-<div class="input-group mb-3">
-  <span class="input-group-text" id="inputGroup-sizing-default">Numero DDT</span>
-  <input id="numero" name="numero" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-</div>
-<div class="input-group mb-3">
-  <span class="input-group-text" id="inputGroup-sizing-default">Data DDT</span>
-  <input id="date" name="date" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-</div>
-{% if error %}
-  <p class="red">{{error}}</p>
-{% endif %}
-  <div class="col-12">
-    <button class="btn btn-primary" type="submit">Invia dati</button>
+
+<form class="box" method="POST">
+  <div class="field">
+    <label class="label">Data della certificazione</label>
+    <div class="control">
+      <input class="input" type="date" name="datacert" required>
+    </div>
   </div>
+
+  <div class="field">
+    <label class="label">Data del DDT</label>
+    <div class="control">
+      <input class="input" type="date" name="date" required>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Numero del DDT</label>
+    <div class="control">
+      <input class="input" type="text" name="numero" required>
+    </div>
+  </div>
+
+  <button class="button is-primary" type="submit">Compila</button>
 </form>
-<a class="btn btn-primary" href="{{url_for('index')}}">Ritorna alla home</a>
+
 {% endblock %}
