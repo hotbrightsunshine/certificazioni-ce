@@ -13,4 +13,32 @@
   + Stilizzazione del sito per renderlo piacevole esteticamente.
   + Ottimizzazione delle query eseguite per il rendering della pagina all'indirizzo ~/ddt/-/article/-~
     (con il trattino ~-~ vengono indicati i valori che possono variare).
+  + Eliminazione dei record /ricorsiva/: Se, ad esempio, viene eliminato un documento di trasporto, i suoi articoli non devono poter essere visibili
+    all'utente. 
+  + Eliminazione degli ordini, articoli, e altri elementi. Fino ad adesso, solo l'eliminazione dei documenti di trasporto e degli articoli è stata scritta.
+  + Modifica dei dati: deve essere possibile modificare dei campi di un elemento dal lato utente. 
+
+** Struttura del progetto
+  Il progetto è stato volutamente strutturato senza classi ed oggetti per semplificarlo e rimuovere astrazioni superflue. 
+  Tuttavia, vengono usate le classi per raccogliere i metodi sotto dei /namespace/. 
+  Quindi, per utilizzare un metodo di un altro modulo, è necessario importarlo con la sua classe omonima. 
+
+  Il progetto è strutturato quindi in una parte di template (sotto la cartella ~templates~) e una parte di logica, che si occupa de
+  + l'accesso al database e i suoi dati nel file ~db.py~,
+  + l'accesso agli articoli, la loro modifica e il loro inserimento nel file ~articolo.py~,
+  + l'accesso ai documenti di trasporto, la loro modifica e il loro inserimento nel file ~ddt.py~,
+  + la gestione degli utenti nel file ~user.py~,
+  + la visualizzazione dei dati e la gestione degli indirizzi nel file ~app.py~,
+  C'è anche un altro file, ~util.py~ che contiene alcune funzioni generiche. 
+
+  Le pagine contenute in ~templates~ invece sono:
+  + ~layout/father.html~, una pagina che viene estesa da tutte, nella quale viene gestito i layout base di tutte le pagine;
+  + ~articoli.html~, usata per visualizzare tutti gli articoli appartenenti ad un certo documento di trasporto;
+  + ~articolo_view.html~, usata per visualizzare i dettagli di un articolo e per inserire nuovi dati al suo interno;
+  + ~ddt_compile.html~, usato per visualizzare il form di inserimento di un nuovo documento di traporto;
+  + ~ddt_view.html~, usato per visualizzare i dettagli di un documento di trasporto;
+  + ~index.html~, usata per visualizzare tutti i documenti di trasporto di un utente;
+  + ~login.html~, usata per visualizzare il form di login;
+  + ~new_article.html~, usato per visualizzare il form di inserimento di un nuovo articolo. 
+  
   

@@ -125,6 +125,13 @@ def newarticolo(ddtnum:int):
         return redirect(url_for("login"))
     return render_template("new_article.html", ddtnum = ddtnum)
 
+## Delete Articolo
+@app.route("/ddt/<int:ddtnum>/article/<int:artnum>/delete")
+def delete_articolo(ddtnum:int, artnum:int):
+    if is_logged(session) == False:
+        return redirect(url_for("login"))
+    Articolo.delete(artnum)
+    return redirect(url_for("articoli", ddtnum=ddtnum))
 
 ## Articolo Detailed View
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>")
@@ -246,6 +253,7 @@ def add_order(ddtnum, artnum):
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
+# Quantità
 @app.route("/ddt/<int:ddtnum>/article/<int:artnum>/quantita", methods=["POST"])
 def set_quantity(ddtnum, artnum):
     if is_logged(session) == False:

@@ -4,13 +4,16 @@ from util import *
 
 class Articolo:
     def get(art_num):
-        q = DB.select_star("testpython.cefart0f", f"cearid={art_num}")
+        q = DB.select_star("testpython.cefart0f", f"cearid={art_num} AND cearata=' '")
         print(q)
         return q[0]
 
     def get_with_ddt_number(ddtnum):
-        articoli = DB.select_star("testpython.cefart0f", f"cearddtid={ddtnum}")
+        articoli = DB.select_star("testpython.cefart0f", f"cearddtid={ddtnum} AND cearata=' '")
         return articoli
+
+    def delete(artnum):
+        DB.update_field("testpython.cefart0f", "cearata", "'r'", f"cearid={artnum}")
 
     def update_lavorazioni(artnum, taglio, punzonatura, saldatura, piegatura, foratura):
         taglio = Util.bool_to_int(taglio)

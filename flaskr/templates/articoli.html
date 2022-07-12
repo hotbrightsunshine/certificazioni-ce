@@ -16,10 +16,11 @@
   {% for art in articles %}
   <div class="row border p-3 m-3 rounded">
     <div class="col-md-8">
-      {{art}}
+      <p>Codice Articolo: {{art['CEARCDPA']}}</p>
+      <p>Quantità: {{art['CEARQTY']}}</p> 
     </div>
     <div class="col-md-2">
-      <a class="btn btn-danger" href="">Elimina</a>
+      <a class="btn btn-danger" href="{{url_for('delete_articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Elimina</a>
     </div>
     <div class="col-md-2">
       <a class="btn btn-primary" href="{{url_for('articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Modifica</a>
