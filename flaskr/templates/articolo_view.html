@@ -1,266 +1,310 @@
 {% extends "layout/father.html" %}
+{% block title %} Articolo {{artnum}}, DDT n. {{ddtnum}} {%endblock%}
+
+{% block bar %}
+<a href="{{url_for('articoli', ddtnum=ddtnum)}}" class="button is-light is-primary is-fullwidth">Torna indietro</a>
+{% endblock %}
+
 {% block content %}
+
+<div class="columns">
+    <div class="column">
+        <div class="box">
+            <h1 class="subtitle">
+                Lavorazioni
+            </h1>
+            <form method="POST" action="{{url_for('update_lavorazioni_articolo', ddtnum=ddtnum, artnum=artnum)}}">
+                <div class="columns">
+
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="Punzonatura" {% if articolo['CEARPUNZ'] == 1 %} checked
+                                {% endif %}>
+                            Punzonatura
+                        </div>
+                    </div>
+
+                    {% if can_saldatura %}
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="Saldatura" {% if articolo['CEARSALD'] == 1 %} checked
+                                {% endif %} onclick="toggleHide('saldatura')" id="" saldatura-checkbox>
+                            Saldatura
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="Piegatura" {% if articolo['CEARPIEG'] == 1 %} checked
+                                {% endif %}>
+                            Piegatura
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="Taglio" {% if articolo['CEARTAGL'] == 1 %} checked {% endif %}>
+                            Taglio
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="Foratura" {% if articolo['CEARFORA'] == 1 %} checked
+                                {% endif %}>
+                            Foratura
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <button class="button is-primary is-fullwidth" type="submit">Salva</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="box">
+            <h1 class="subtitle">
+                Controlli di fabbricazione
+            </h1>
+            <div class="columns">
+                <div class="column">
+                    <div class="checkbox">
+                        <input type="checkbox" name="controlli-dimensionali" required {% if articolo['CEARCTDI'] == 1 %}
+                            checked {% endif %}>
+                        Controlli dimensionali
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="checkbox">
+                        <input type="checkbox" name="controlli-visivi" required {% if articolo['CEARCTVI'] == 1 %}
+                            checked {% endif %}>
+                        Controlli visivi
+                    </div>
+                </div>
+                <div class="column">
+                    <button class="is-fullwidth button is-primary" type="submit">
+                        Salva
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% if can_saldatura %}
+    <div class="column" id="saldatura">
+        <div class="box">
+            <h1 class="subtitle">
+                Saldatura
+            </h1>
+            <form method="POST" action="{{url_for('set_saldatura', artnum=artnum, ddtnum=ddtnum)}}">
+                <div class="field">
+                    <label for="" class="label">Saldatrice</label>
+                    <div class="select is-fullwidth">
+                        <select required name="equip">
+                            {% for equip in equipaggiamento %}
+                            <option value="{{equip['CEDVID']}}" {% if saldatura['CESADEID'] == equip['CEDVID'] %}
+                                selected {%endif%}>
+                                Saldatrice {{equip['CEDVMARCA']}} {{equip['CEDVMODEL']}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Saldatore 1</label>
+                    <div class="select is-fullwidth">
+                        <select name="sald1">
+                            {% for sald in saldatori %}
+                            <option value="{{sald['CESGID']}}" {% if saldatura['CESAS1ID'] == sald['CESGID'] %} selected
+                                {%endif%}>
+                                {{sald['CESGNOMI']}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Saldatore 2</label>
+                    <div class="select is-fullwidth">
+                        <select name="sald2">
+                            <option value="0">Nessuno</option>
+                            {% for sald in saldatori %}
+                            <option value="{{sald['CESGID']}}" {% if saldatura['CESAS1ID'] == sald['CESGID'] %} selected
+                                {%endif%}>
+                                {{sald['CESGNOMI']}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">WPS</label>
+                    <div class="select is-fullwidth">
+                        <select name="wps">
+                            {% for wps in wpss %}
+                            <option value="{{wps['CEWSID']}}" {% if saldatura['CESAWSID'] == wps['CEWSID'] %} selected
+                                {%endif%}>
+                                {{wps['CEWSNUM']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">WPQR 1</label>
+                    <div class="select is-fullwidth">
+                        <select name="wpqr1">
+                            {% for wpqr in wpqrs %}
+                            <option value="{{wpqr['CEWRID']}}" {% if saldatura['CESAR1ID'] == wpqr['CEWRID'] %} selected
+                                {%endif%}>
+                                {{wpqr}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">WPQR 2</label>
+                    <div class="select is-fullwidth">
+                        <select name="wpqr2">
+                            <option value="0">Nessuna</option>
+                            {% for wpqr in wpqrs %}
+                            <option value="{{wpqr['CEWRID']}}" {% if saldatura['CESAR1ID'] == wpqr['CEWRID'] %} selected
+                                {%endif%}>
+                                {{wpqr}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <button class="button is-primary is-fullwidth" type="submit">Salva</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="columns">
+    <div class="column">
+        <div class="box">
+            <h1 class="subtitle">
+                Materiali di origine
+            </h1>
+
+            <div class="field">
+                <label for="" class="label">Origine del materiale</label>
+                <div class="select is-fullwidth">
+                    <div id="aggiunta-materiali">
+                        <select id="new_materiale">
+                            <option value="certificato-collaudo">Materiale con certificato di collaudo</option>
+                            <option value="conto-lavorazione">Materiale in conto lavorazione</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <form id="form-conto-lavorazione"
+                action="{{url_for('add_materiale_conto_lavorazione', ddtnum=ddtnum, artnum=artnum, matnum=0)}}">
+
+                <div class="field">
+                    <label for="" class="label">Tipo di materiale</label>
+                    <div class="select is-fullwidth">
+                        <select name="tipoMateriale">
+                            {% if can_saldatura %}
+                            <option value="A">Materiale d'apporto</option>
+                            {% endif %}
+                            <option value="B">Materiale di base</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Codice del Componente</label>
+                    <input class="input" type="text" name="codiceComponente">
+                </div>
+
+                <div class="field">
+                    <label class="label">Numero della colata</label>
+                    <input class="input" type="text" name="numeroColata" id="">
+                </div>
+
+                <div class="field">
+                    <label class="label">Punzonatura</label>
+                    <input class="input" type="text" name="punzonatura" id="">
+                </div>
+
+                <button type="submit" class="button is-primary is-fullwidth">Salva</button>
+
+            </form>
+
+            <form action="{{ url_for('add_materiale_collaudo', ddtnum = ddtnum, artnum= artnum, matnum=0) }}"
+                id="form-certificato-collaudo" method="post">
+
+                <label class="checkbox">
+                    <input type="checkbox" name="dop">
+                    Possiedo la DOP
+                </label>
+
+                <div class="field">
+                    <label for="" class="label">Tipo del materiale</label>
+                    <div class="select is-fullwidth">
+                        <select name="tipoMateriale2">
+                            {% if can_saldatura %}
+                            <option value="A">Materiale d'apporto</option>
+                            {%endif%}
+                            <option value="B">Materiale di base</option>
+                        </select>
+                    </div>
+                </div>
+                
+
+                <div class="field">
+                    <label for="" class="label">Certificato di collaudo</label>
+                    <input type="text" class="input" name="certificatoCollaudo">
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Data</label>
+                    <input type="text" class="input" name="dataCertificato">
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Numero della colata</label>
+                    <input type="text" class="input" name="numeroColata">
+                </div>
+
+                <button class="button is-primary is-fullwidth" type="submit">Aggiungi</button>
+
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 {% if err_apporto_mancante and can_saldatura %}
 <h3 style="color:red">Questo articolo è stato lavorato con saldatura, e richiede l'imissione di almeno un materiale di
     apporto; perfavore inseriscine uno. Se pensi che sia un errore, controlla i campi e correggi.</h3>
 {% endif %}
-<a class="btn btn-info mt-3" href="{{url_for('articoli', ddtnum=ddtnum)}}">Torna indietro</a>
-
-<div class="row p-3">
-    <form action="{{url_for('set_quantity', ddtnum=ddtnum, artnum=artnum)}}" method="post">
-        <h2>Quantità</h2>
-        <input type="number" name="qty" id="qty" min="1" required value="{{articolo['CEARQTY']}}">
-        <button type="submit">Salva</button>
-    </form>
-</div>
-
-<div class="row p-3">
-
-    <div class="border rounded p-3">
-        <form action="{{url_for('update_lavorazioni_articolo', ddtnum=ddtnum, artnum=artnum)}}" method="POST">
-            <div class="row">
-                <h1>Lavorazioni</h1>
-            </div>
-            <div class="row">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Punzonatura"
-                    {% if articolo['CEARPUNZ'] == 1 %} checked {% endif %}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Punzonatura
-                    </label>
-                </div>
-                {% if can_saldatura %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" onclick="toggleHide('saldatura')"
-                        id="saldatura-checkbox" name="Saldatura" {% if articolo['CEARSALD'] == 1 %} checked {% endif %}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Saldatura
-                    </label>
-                </div>
-                {% endif %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Piegatura"
-                    {% if articolo['CEARPIEG'] == 1 %} checked {% endif %}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Piegatura
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="Taglio" name="Taglio"
-                    {% if articolo['CEARTAGL'] == 1 %} checked {% endif %}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Taglio
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="Foratura"
-                    {% if articolo['CEARFORA'] == 1 %} checked {% endif %}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Foratura
-                    </label>
-                </div>
-
-
-            </div>
-
-            <div class="row">
-                <button class="btn-primary btn text-right" type="submit">Salva</button>
-            </div>
-        </form>
-    </div>
-</div>
-{% if can_saldatura or not is_ce%}
-<div class="rounded border p-3" id="saldatura">
-    <h1>Saldatura</h1>
-    <form action="{{url_for('set_saldatura', artnum=artnum, ddtnum=ddtnum)}}" method="post">
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Equipaggiamento</label>
-            <select class="form-select" id="equip" name="equip" required>
-                {% for equip in equipaggiamento %}
-                <option value="{{equip['CEDVID']}}"
-                {% if saldatura['CESADEID'] == equip['CEDVID'] %} selected {%endif%}>{{equip}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Saldatore 1</label>
-            <select class="form-select" id="sald1" name="sald1" required>
-                {% for sald in saldatori %}
-                <option value="{{sald['CESGID']}}"
-                {% if saldatura['CESAS1ID'] == sald['CESGID'] %} selected {%endif%}>{{sald}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Saldatore 2</label>
-            <select class="form-select" id="sald2" name="sald2">
-                <option value="0">Nessuno</option>
-                {% for sald in saldatori %}
-                <option value="{{sald['CESGID']}}" 
-                {% if saldatura['CESAS2ID'] == sald['CESGID'] %} selected {%endif%}>{{sald}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">WPS</label>
-            <select class="form-select" id="wps" name="wps" required>
-                {% for wps in wpss %}
-                <option value="{{wps['CEWSID']}}"
-                {% if saldatura['CESAWSID'] == wps['CEWSID'] %} selected {%endif%}>{{wps}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">WPQR 1</label>
-            <select class="form-select" id="wpqr1" name="wpqr1" required>
-                {% for wpqr in wpqrs %}
-                <option value="{{wpqr['CEWRID']}}"
-                {% if saldatura['CESAR1ID'] == wpqr['CEWRID'] %} selected {%endif%}>{{wpqr}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">WPQR 2</label>
-            <select class="form-select" id="wpqr2" name="wpqr2">
-                <option value="0">Nessuna</option>
-                {% for wpqr in wpqrs %}
-                <option value="{{wpqr['CEWRID']}}"
-                {% if saldatura['CESAR2ID'] == wpqr['CEWRID'] %} selected {%endif%}>{{wpqr}}</option>
-                {% endfor %}
-            </select>
-            <button class="btn btn-primary" type="submit">Salva</button>
-        </div>
-    </form>
-</div>
-{% endif %}
-<div class="border rounded p-3">
-    <div id="controlli">
-        <form action="{{url_for('update_controlli', ddtnum=ddtnum, artnum=artnum)}}" method="post">
-            <h1>Controlli</h1>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="controlli-dimensionali"
-                    name="controlli-dimensionali" required {% if articolo['CEARCTDI'] == 1 %} checked {% endif %}>
-                <label class="form-check-label" for="flexCheckDefault">
-                    Controlli Dimensionali
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="controlli-visivi" name="controlli-visivi"
-                    aria-required="true" required {% if articolo['CEARCTVI'] == 1 %} checked {% endif %}>
-                <label class="form-check-label" for="flexCheckDefault">
-                    Controlli Visivi
-                </label>
-            </div>
-            <div class="row">
-                <button class="btn btn-primary" type="submit">Salva</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 
 {% if not isce %}
 <div>
     <h1>Materiali di origine</h1>
-    <div id="aggiunta-materiali row">
-        <select class="form-select" aria-label="Default select example" id="new_materiale">
-            <option value="certificato-collaudo">Materiale con certificato di collaudo</option>
-            <option value="conto-lavorazione">Materiale in conto lavorazione</option>
-        </select>
-    </div>
-
-    <div id="form-conto-lavorazione" class="row">
-        <form method="post"
-            action="{{url_for('add_materiale_conto_lavorazione', ddtnum=ddtnum, artnum=artnum, matnum=0)}}">
-
-            <div class="border rounder m-3 p-3">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Tipo di materiale</span>
-                    <select class="form-select" name="tipoMateriale" id="tipoMateriale" required>
-                        {% if can_saldatura %}
-                        <option value="A">Materiale d'apporto</option>
-                        {% endif %}
-                        <option value="B">Materiale di base</option>
-                    </select>
-                </div>
-
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default" required>Codice del componente</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default" id="codiceComponente" name="codiceComponente">
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default" required>Numero della colata</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata">
-                </div>
-
-                <div class="row">
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default" required>Punzonatura</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-default" id="punzonatura" name="punzonatura">
-                        <button type="submit" class="btn btn-primary">Aggiungi</button>
-                    </div>
-
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div id="form-certificato-collaudo" class="row">
-        <form method="post" action="{{ url_for('add_materiale_collaudo', ddtnum = ddtnum, artnum= artnum, matnum=0) }}">
-
-            <div class="border rounder m-3 p-3">
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="dop" id="dop">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Possiedo la DOP
-                    </label>
-                </div>
-
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Tipo di materiale</span>
-                    <select class="form-select" name="tipoMateriale2" id="tipoMateriale2">
-                        {% if can_saldatura %}
-                        <option value="A">Materiale d'apporto</option>
-                        {% endif %}
-                        <option value="B">Materiale di base</option>
-                    </select>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Certificato di collaudo</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default" id="certificatoCollaudo" name="certificatoCollaudo"
-                        required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Data</span>
-                    <input type="date" class="form-control" aria-label="Sizing example input"
-                        pattern="\d{4}-\d{2}-\d{2}" aria-describedby="inputGroup-sizing-default" id="dataCertificato"
-                        name="dataCertificato" required>
-
-                </div>
-
-                <div class="row">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Numero della colata</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-default" id="numeroColata" name="numeroColata" required>
-                        <button type="submit" class="btn btn-primary">Aggiungi</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    </form>
 </div>
 {% else %}
 <div id="file-upload" class="border p-3">
@@ -278,16 +322,17 @@
     {% for mat in materiali %}
     <div class="row rounded border my-3">
         {% if mat['CEORORIG'] == '1' %}
-            <h2>Materiale in conto lavorazione</h2>
-            <p>Codice componente: {{mat['CEORCDPAR']}}</p>
-            <p>Punzonatura: {{mat['CEORPUNNR']}}</p>
+        <h2>Materiale in conto lavorazione</h2>
+        <p>Codice componente: {{mat['CEORCDPAR']}}</p>
+        <p>Punzonatura: {{mat['CEORPUNNR']}}</p>
         {% else %}
-            <h2>Materiale con certificato di collaudo</h2>
-            <p>Certificato di collaudo: {{mat['CEORCLLNR']}}</p>
-            <p>Data: {{mat['CEORCLLDT']}}</p>
+        <h2>Materiale con certificato di collaudo</h2>
+        <p>Certificato di collaudo: {{mat['CEORCLLNR']}}</p>
+        <p>Data: {{mat['CEORCLLDT']}}</p>
         {% endif %}
         <p>Numero della colata: {{mat['CEORCOLNR']}}</p>
-        <a href="{{url_for('delete_materiale', matnum=mat['CEORID'], artnum=artnum, ddtnum=ddtnum)}}" class="btn btn-danger">Elimina</a>
+        <a href="{{url_for('delete_materiale', matnum=mat['CEORID'], artnum=artnum, ddtnum=ddtnum)}}"
+            class="btn btn-danger">Elimina</a>
     </div>
     {% endfor %}
 </div>
@@ -329,7 +374,8 @@
         <p>Data: {{ord['CEOADATA']}}</p>
         <p>Quantità: {{ord['CEOAQTY']}}</p>
         {{ord}}
-        <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}" class="btn btn-danger">Elimina</a>
+        <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}"
+            class="btn btn-danger">Elimina</a>
     </div>
 
     {% endfor %}
@@ -361,7 +407,7 @@
     }
 
     window.onload = function () {
-        if (! $('#saldatura-checkbox').prop('checked')){
+        if (!$('#saldatura-checkbox').prop('checked')) {
             $("#saldatura").addClass("d-none");
         }
         hideFormMateriale();
