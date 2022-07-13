@@ -35,10 +35,6 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET")
 
 
-## Flask Configuration
-app.jinja_env.globals['login'] = is_logged(session)
-
-
 ## Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -149,7 +145,8 @@ def articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
 
-    materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}' AND ceorata = ' '")
+    materiali = DB.select_star("testpython.cefori0f",
+        f"ceoridar='{artnum}' AND ceorata = ' '")
 
     isce = is_ce(session)
     can_saldatura = session.get("saldatura")
@@ -302,17 +299,21 @@ def set_saldatura(ddtnum, artnum):
     sald = DB.select_star("testpython.cefsal0f", f"cesaarid='{artnum}'")
     if sald == []:
         DB.execute(f"""INSERT INTO testpython.cefsal0f (
-            cesaarid, cesas1id, cesas2id, cesar1id, cesar2id, cesawsid,
-            cesadeid, cesaata) VALUES (
+                cesaarid, cesas1id, cesas2id, cesar1id, cesar2id, cesawsid,
+                cesadeid, cesaata) VALUES (
                 {artnum}, {saldatore1}, {saldatore2}, 
                 {wpqr1}, {wpqr2}, {wps}, {equip}, ' ')""")
     else:
-        DB.update_field("testpython.cefsal0f", "cesas1id", f"{saldatore1}", f"cesaarid={artnum}")
-        DB.update_field("testpython.cefsal0f", "cesas2id", f"{saldatore2}", f"cesaarid={artnum}")
-        DB.update_field("testpython.cefsal0f", "cesar1id", f"{wpqr1}", f"cesaarid={artnum}")
-        DB.update_field("testpython.cefsal0f", "cesar2id", f"{wpqr2}", f"cesaarid={artnum}")
-        DB.update_field("testpython.cefsal0f", "cesawsid", f"{wps}", f"cesaarid={artnum}")
-        DB.update_field("testpython.cefsal0f", "cesadeid", f"{equip}", f"cesaarid={artnum}")
+        DB.execute(f"""
+            UPDATE testpython.cefsal0f 
+            SET     cesas1id = {saldatore1},
+                    cesas2id = {saldatore2},
+                    cesar1id = {wpqr1},
+                    cesar2id = {wpqr2},
+                    cesawsid = {wps},
+                    cesadeid = {equip}
+            WHERE   cesaarid = {artnum}
+        """)
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))  
 
 

@@ -57,13 +57,9 @@ class Articolo:
                 cearsald = {saldatura}
             WHERE cearid = {artnum}
         """
+        DB.execute(q)
 
-        DB.update_field("testpython.cefart0f", "cearpunz", f"'{punzonatura}'", f"cearid={artnum}")
-        DB.update_field("testpython.cefart0f", "ceartagl", f"'{taglio}'", f"cearid={artnum}")
-        DB.update_field("testpython.cefart0f", "cearfora", f"'{foratura}'", f"cearid={artnum}")
-        DB.update_field("testpython.cefart0f", "cearpieg", f"'{piegatura}'", f"cearid={artnum}")
-        DB.update_field("testpython.cefart0f", "cearsald", f"'{saldatura}'", f"cearid={artnum}")
-
+        
     # Aggiorna i controlli di un articolo
     def update_controlli(artnum, controlli_dimensionali, controlli_visivi):
         controlli_dimensionali = Util.bool_to_int(controlli_dimensionali)

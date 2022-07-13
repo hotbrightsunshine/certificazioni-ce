@@ -10,16 +10,20 @@
 <noscript>
     <article class="message is-danger mb-3">
         <div class="message-header">
-          <p>Javascript è disabilitato</p>
+            <p>Javascript è disabilitato</p>
         </div>
         <div class="message-body">
-            Questa pagina utilizza alcune funzioni Javascript che sono necessarie per la validazione dei moduli, pertanto è necessario attivarlo temporaneamente
-            per il suo funzionamento corretto. 
-            In particolare, utilizziamo una libreria Javascript chiamata JQuery per accedere più facilmente ai componenti della pagina. Se non ti fidi, 
-            e vuoi controllare, puoi consultare il codice sorgente di questo sito web <a href="https://github.com/hotbrightsunshine/certificazioni-ce">a questa pagina GitHub</a>.
-            Se vuoi, puoi abilitare Javascript soltanto per compilare il modulo dei materiali e delle saldature per poi disabilitarlo nuovamente.
+            Questa pagina utilizza alcune funzioni Javascript che sono necessarie per la validazione dei moduli,
+            pertanto è necessario attivarlo temporaneamente
+            per il suo funzionamento corretto.
+            In particolare, utilizziamo una libreria Javascript chiamata JQuery per accedere più facilmente ai
+            componenti della pagina. Se non ti fidi
+            e vuoi controllare, puoi consultare il codice sorgente di questo sito web <a
+                href="https://github.com/hotbrightsunshine/certificazioni-ce">a questa pagina GitHub</a>.
+            Se vuoi, puoi abilitare Javascript soltanto per compilare il modulo dei materiali e delle saldature per poi
+            disabilitarlo nuovamente.
         </div>
-      </article>
+    </article>
 </noscript>
 
 <div class="title">Lavorazioni e controlli</div>
@@ -85,25 +89,28 @@
                 Controlli di fabbricazione
             </h1>
             <div class="columns">
-                <div class="column">
-                    <div class="checkbox">
-                        <input type="checkbox" name="controlli-dimensionali" required {% if articolo['CEARCTDI'] == 1 %}
-                            checked {% endif %}>
-                        Controlli dimensionali
+                <form action="{{url_for('update_controlli', artnum=artnum, ddtnum=ddtnum)}}"
+                method="POST">
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="controlli-dimensionali" required
+                                {% if articolo['CEARCTDI'] == 1 %} checked {% endif %}>
+                            Controlli dimensionali
+                        </div>
                     </div>
-                </div>
-                <div class="column">
-                    <div class="checkbox">
-                        <input type="checkbox" name="controlli-visivi" required {% if articolo['CEARCTVI'] == 1 %}
-                            checked {% endif %}>
-                        Controlli visivi
+                    <div class="column">
+                        <div class="checkbox">
+                            <input type="checkbox" name="controlli-visivi" required {% if articolo['CEARCTVI'] == 1 %}
+                                checked {% endif %}>
+                            Controlli visivi
+                        </div>
                     </div>
-                </div>
-                <div class="column">
-                    <button class="is-fullwidth button is-primary" type="submit">
-                        Salva
-                    </button>
-                </div>
+                    <div class="column">
+                        <button class="is-fullwidth button is-primary" type="submit">
+                            Salva
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -416,12 +423,12 @@
             <div class="field">
                 <p><strong>Quantità: </strong>{{ord['CEOAQTY']}}</p>
             </div>
-            
+
             <a href="{{url_for('delete_ordine', artnum=artnum, ddtnum=ddtnum, ordnum=ord['CEOAID'])}}"
                 class="button is-danger">Elimina</a>
         </div>
         {%endfor%}
-        
+
     </div>
     {% endif %}
 </div>
