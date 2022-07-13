@@ -1,6 +1,6 @@
 * Registro delle modifiche apportate al codice
 
-+ *Dal commit ~#70d4ca2~ al commit ~#a57571b~:*
+** Dal commit ~#70d4ca2~ al commit ~#a57571b~:
     + Restyling del sito con Bulma;
     + Refactoring generale e rimozione di funzioni inutili e lente;
     + Ottimizzazione del codice e delle query: il tempo di caricamento è quasi dimezzato;
@@ -8,16 +8,16 @@
     + Rimozione ricorsiva degli elementi;
     + Scrittura di una documentazione chiara;
 
-+ *Dal commit ~#8bd15db~ al commit ~#70d4ca2~:*
+** Dal commit ~#8bd15db~ al commit ~#70d4ca2~:
     + Refactoring del codice, suddivisione delle funzioni in classi;
     + Introduzione della funzione ~query_dict~;
     + Aggiunta dei moduli per utenti CE, per le saldature, materiali e ordini;
 
-+ *Dal commit ~#c35d49e~ al commit ~#8bd15db~:*
+** Dal commit ~#c35d49e~ al commit ~#8bd15db~:
     + Migrazione del codice al database IBM;
     + Aggiunte funzionalità per aggiungere gli articoli e le lavorazioni;
 
-+ *Dal primo commit al commit ~#c35d49e~:*
+** Dal primo commit al commit ~#c35d49e~:
     + Varie rioriganizzazioni del progetto, requisiti e casi d'uso;
     + Primo abbozzo della logica per il log-in;
     
