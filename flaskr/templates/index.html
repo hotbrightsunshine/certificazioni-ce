@@ -10,13 +10,13 @@
 
   {% for ddt in ddtlist %}
   <div class="box">
-    <div class="columns  is-flex is-vcentered">
+    <div class="columns is-flex is-vcentered">
       <div class="column">
         <p><strong>Numero DDT:</strong> {{ddt['CEDTDDTNR']}}</p>
         <p><strong>Data certificazione:</strong> {{ddt['CEDTCEDT']}}</p> 
         <p><strong>Data DDT: </strong>{{ddt['CEDTDDTDT']}}</p> 
       </div>
-      <div class="column is-one-fifth has-text-centered">
+      <div class="column has-text-centered">
         <div class="columns">
           <div class="column">
             <a class="button is-primary is-fullwidth" href="{{url_for('ddt', ddtnum=ddt['CEDTID'])}}">Modifica</a>

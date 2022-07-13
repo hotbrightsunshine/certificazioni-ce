@@ -146,6 +146,8 @@ def articolo(ddtnum:int, artnum:int):
     can_saldatura = User.can_saldatura(session.get('username'))
 
     err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
+    print(err_apporto_mancante)
+    print(can_saldatura)
     err_troppi_ordini = Articolo.are_troppi_ordini(artnum)
     max_ordini = Articolo.get_max_ordini(artnum)
     ordini=Articolo.get_orders_of(artnum)

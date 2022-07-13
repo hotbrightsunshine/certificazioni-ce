@@ -28,13 +28,13 @@
       <p><strong>Codice dell'Articolo:</strong> {{art['CEARCDPA']}}</p>
       <p><strong>Quantità:</strong> {{art['CEARQTY']}}</p> 
     </div>
-    <div class="column is-one-fifth has-text-centered">
+    <div class="column has-text-centered">
       <div class="columns">
         <div class="column">
-          <a class="button is-primary" href="{{url_for('articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Modifica</a>
+          <a class="button is-primary is-fullwidth" href="{{url_for('articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Modifica</a>
         </div>
         <div class="column">
-          <a class="button is-danger" href="{{url_for('delete_articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Elimina</a>
+          <a class="button is-danger is-fullwidth" href="{{url_for('delete_articolo', ddtnum=ddtnum, artnum=art['CEARID'])}}">Elimina</a>
         </div>
       </div>
     </div>

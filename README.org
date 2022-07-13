@@ -3,15 +3,17 @@
 
 ** Descrizione
   Il progetto è stato scritto interamente in Python, utilizzando il micro-framework Flask per gestire la logica, e il Jinja Template Engine per i template. 
+  In aggiunta, è stato usato il Bulma CSS Framework, assieme a SASS, un pre-compilatore di CSS, per rendere piacevole la grafica del sito internet.
   Le documentazioni ufficiali si trovano a questi indirizzi:
   + https://jinja.palletsprojects.com/en/3.1.x/
   + https://flask.palletsprojects.com/en/2.1.x/
+  + https://bulma.io/
+  + https://sass-lang.com/
 
 ** Stato del progetto
   Il progetto non si trova in uno stato di completezza. Di seguito, vengono inserite le feature che servono ad una finalizzazione approssimativa del sito. 
   + Gestione di più tipi di utenti. Fino ad adesso, solo il ruolo di fornitore è stato scritto. 
   + Redirect ottimizzati per una maggiore semplicità d'uso.
-  + Stilizzazione del sito per renderlo piacevole esteticamente.
   + Ottimizzazione delle query eseguite per il rendering della pagina all'indirizzo ~/ddt/-/article/-~
     (con il trattino ~-~ vengono indicati i valori che possono variare).
   + Modifica dei dati: deve essere possibile modificare dei campi di un elemento dal lato utente.
