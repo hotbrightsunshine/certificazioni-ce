@@ -6,7 +6,6 @@ class Articolo:
     # Ritorna l'articolo dato il suo ID 
     def get(art_num):
         q = DB.select_star("testpython.cefart0f", f"cearid={art_num} AND cearata=' '")
-        print(q)
         return q[0]
 
     # Ritorna gli articoli dato il suo DDT
@@ -20,7 +19,6 @@ class Articolo:
 
         # Elimina tutte le sue saldature
         sald = DB.select_star("testpython.cefsal0f", f"cesaarid={artnum}")
-        print ("SALDATURE: ", sald)
         saldids = []
         for s in sald:
             saldids.append(int(s['CESAID']))
@@ -29,11 +27,9 @@ class Articolo:
 
         # Elimina tutti i suoi materiali
         mat = DB.select_star("testpython.cefori0f", f"ceoridar={artnum}")
-        print ("MATERIALI: ", mat)
         matids = []
         for m in mat:
             matids.append(int(m['CEORID']))
-        print("ID MATERIALI: ", matids)
         for m in matids:
             Articolo.delete_materiale(m)
 
@@ -173,7 +169,6 @@ class Articolo:
     def get_max_ordini(artnum):
         sum_orders = Articolo.get_sum_of_orders(Articolo.get_orders_of(artnum))
         art_qty = DB.select_field("cearqty", "testpython.cefart0f", f"cearid={artnum}")
-        print(art_qty)
         max_try = int(art_qty[0]['CEARQTY']) - sum_orders
         if max_try <= 0:
             return 0
