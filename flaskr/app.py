@@ -141,18 +141,27 @@ def delete_articolo(ddtnum:int, artnum:int):
 def articolo(ddtnum:int, artnum:int):
     if is_logged(session) == False:
         return redirect(url_for("login"))
+
     materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}' AND ceorata = ' '")
     isce = User.is_ce(session.get('username'))
     can_saldatura = User.can_saldatura(session.get('username'))
 
-    err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
-    print(err_apporto_mancante)
-    print(can_saldatura)
-    err_troppi_ordini = Articolo.are_troppi_ordini(artnum)
-    max_ordini = Articolo.get_max_ordini(artnum)
-    ordini=Articolo.get_orders_of(artnum)
-    is_difference_zero=Articolo.is_difference_zero(artnum)
     articolo=Articolo.get(artnum)
+    articolo_quantita = articolo['CEARQTY']
+
+    # Lista degli ordini
+    ordini=Articolo.get_orders_of(artnum)
+
+    # Quantità complessiva degli ordini
+    orders_sum = Articolo.get_sum_of_orders(ordini)
+
+    err_apporto_mancante = Articolo.is_apporto_mancante(artnum)
+
+    err_troppi_ordini = orders_sum > articolo_quantita
+    max_ordini = articolo_quantita - orders_sum
+
+    is_difference_zero=articolo_quantita == orders_sum
+    
     try:
         saldatura = DB.select_star("testpython.cefsal0f", f"cesaarid={artnum}")[0]
     except:
@@ -284,14 +293,12 @@ def set_saldatura(ddtnum, artnum):
 
     sald = DB.select_star("testpython.cefsal0f", f"cesaarid='{artnum}'")
     if sald == []:
-        print("Non c'è una saldatura. Creo.")
         DB.execute(f"""INSERT INTO testpython.cefsal0f (
             cesaarid, cesas1id, cesas2id, cesar1id, cesar2id, cesawsid,
             cesadeid, cesaata) VALUES (
                 {artnum}, {saldatore1}, {saldatore2}, 
                 {wpqr1}, {wpqr2}, {wps}, {equip}, ' ')""")
     else:
-        print("C'è già una saldatura. Modifica.")
         DB.update_field("testpython.cefsal0f", "cesas1id", f"{saldatore1}", f"cesaarid={artnum}")
         DB.update_field("testpython.cefsal0f", "cesas2id", f"{saldatore2}", f"cesaarid={artnum}")
         DB.update_field("testpython.cefsal0f", "cesar1id", f"{wpqr1}", f"cesaarid={artnum}")
