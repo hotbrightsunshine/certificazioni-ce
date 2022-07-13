@@ -9,7 +9,6 @@ class DB:
 
     # Invia una query (deprecato)
     def query(q:str):
-        #print("QUERY: ", q)
         conn = DB.get_connection()
         cur = conn.cursor()
         cur.execute(q)
@@ -20,7 +19,6 @@ class DB:
 
     # Invia una query e ritorna una mappa di valori { 'campo':valore }
     def query_dict(q:str):
-        #print("QUERY: ", q)
         cursor = DB.get_connection().cursor().execute(q)
         columns = [column[0] for column in cursor.description]
         results = []
@@ -30,7 +28,6 @@ class DB:
 
     # Esegue una query INSERT o UPDATE 
     def execute(q:str):
-        #print("EXECUTE: ", q)
         conn = DB.get_connection()
         conn.execute(q)
         conn.commit()

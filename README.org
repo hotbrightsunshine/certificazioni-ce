@@ -13,8 +13,6 @@
   Il progetto non si trova in uno stato di completezza. Di seguito, vengono inserite le feature che servono ad una finalizzazione approssimativa del sito. 
   + Gestione di più tipi di utenti. Fino ad adesso, solo il ruolo di fornitore è stato scritto. 
   + Redirect ottimizzati per una maggiore semplicità d'uso.
-  + Ottimizzazione delle query eseguite per il rendering della pagina all'indirizzo ~/ddt/-/article/-~
-    (con il trattino ~-~ vengono indicati i valori che possono variare).
   + Modifica dei dati: deve essere possibile modificare dei campi di un elemento dal lato utente.
   + Upload del file DOP per utenti CE.
   + Creazione di un PDF dato il documento di trasporto di un utente.

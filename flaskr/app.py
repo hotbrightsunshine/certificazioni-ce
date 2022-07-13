@@ -150,7 +150,7 @@ def articolo(ddtnum:int, artnum:int):
         return redirect(url_for("login"))
 
     materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}' AND ceorata = ' '")
-    
+
     isce = is_ce(session)
     can_saldatura = session.get("saldatura")
 
@@ -235,7 +235,7 @@ def add_materiale_collaudo(ddtnum:int, artnum:int):
     dop=Util.it_or_false(request.form, "dop")
     dop=Util.bool_to_int(dop)
     
-    Articolo.update_materiale_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop)
+    Articolo.add_materiale_cert_collaudo(artnum, colata, certcollaudo, datacollaudo, tipomateriale, dop)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
@@ -252,7 +252,7 @@ def add_materiale_conto_lavorazione(ddtnum:int, artnum:int):
     tipomateriale = request.form['tipoMateriale']
         
 
-    Articolo.update_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale)
+    Articolo.add_materiale_conto_lavorazione(artnum, codicecomponente, numerocolata, punzonatura, tipomateriale)
 
     return redirect(url_for("articolo", ddtnum=ddtnum, artnum=artnum))
 
