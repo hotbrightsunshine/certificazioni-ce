@@ -39,4 +39,3 @@
   + ~login.html~, usata per visualizzare il form di login;
   + ~new_article.html~, usato per visualizzare il form di inserimento di un nuovo articolo. 
   
-  
