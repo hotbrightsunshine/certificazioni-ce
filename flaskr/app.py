@@ -16,6 +16,12 @@ def is_logged(session):
     except:
         return False
 
+def is_ce(session):
+    try:
+        return session['certificazione'] == True
+    except:
+        return False
+
 # Ritorna l'username dell'utente
 def get_username(session):
     if is_logged(session):
@@ -44,6 +50,7 @@ def login():
             session['login'] = 'ok'
             session['username'] = request.form['username']
             session['certificazione'] = User.is_ce(session['username'])
+            session['saldatura'] = User.can_saldatura(session['username'])
             return redirect(url_for("index"))
     return render_template('login.html', fetched=fetched,  username=session.get('username'))
 
@@ -143,8 +150,9 @@ def articolo(ddtnum:int, artnum:int):
         return redirect(url_for("login"))
 
     materiali = DB.select_star("testpython.cefori0f", f"ceoridar='{artnum}' AND ceorata = ' '")
-    isce = User.is_ce(session.get('username'))
-    can_saldatura = User.can_saldatura(session.get('username'))
+    
+    isce = is_ce(session)
+    can_saldatura = session.get("saldatura")
 
     articolo=Articolo.get(artnum)
     articolo_quantita = articolo['CEARQTY']
