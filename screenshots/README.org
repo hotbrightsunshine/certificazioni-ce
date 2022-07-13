@@ -16,3 +16,6 @@
 
 ** Modifica dati dell'articolo 
 [[articolo_detailed.jpeg]]
+
+** Dati articolo, No Javascript
+[[noscript.jpeg]]
