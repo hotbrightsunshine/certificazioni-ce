@@ -1,1 +1,18 @@
 * Screenshots
+** Login Page
+[[login.jpeg]]
+
+** Homepage
+[[homepage.jpeg]]
+
+** Vista DDT in dettaglio
+[[ddt_detailed.jpeg]]
+
+** Articoli
+[[articles.jpeg]]
+
+** Nuovo articolo
+[[new_article.jpeg]]
+
+** Modifica dati dell'articolo 
+[[articolo_detailed.jpeg]]
