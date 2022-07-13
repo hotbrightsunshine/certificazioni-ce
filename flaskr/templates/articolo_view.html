@@ -89,8 +89,7 @@
                 Controlli di fabbricazione
             </h1>
             <div class="columns">
-                <form action="{{url_for('update_controlli', artnum=artnum, ddtnum=ddtnum)}}"
-                method="POST">
+                <form action="{{url_for('update_controlli', artnum=artnum, ddtnum=ddtnum)}}" method="POST">
                     <div class="column">
                         <div class="checkbox">
                             <input type="checkbox" name="controlli-dimensionali" required
@@ -434,7 +433,39 @@
 </div>
 
 
-
+<div class="title">Quantità</div>
+<div class="columns">
+    <div class="column">
+        <div class="box">
+            <form action="{{url_for('set_quantity', ddtnum=ddtnum, artnum=artnum)}}" method="post">
+                <div class="subtitle">Modifica la quantità dell'articolo</div>
+                <div class="field">
+                    <label for="" class="label">Quantità</label>
+                    <div class="columns">
+                        <div class="column">
+                            <input type="number" class="input" name="qty" value="{{articolo['CEARQTY']}}"
+                            id="qty_input">
+                        </div>
+                        <div class="column is-one-fifth is-hidden" id="plusminus">
+                            <div class="columns">
+                                <div class="column">
+                                    <a class="button is-fullwidth is-danger" 
+                                    onclick="minus()">-</a>
+                                </div>
+                                <div class="column">
+                                    <a class="button is-fullwidth is-info" 
+                                    onclick="plus()">+</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <button class="button is-primary is-fullwidth" type="submit">Salva</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 
@@ -442,6 +473,15 @@
 <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
     integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 <script>
+    function plus(){
+        $("#qty_input").val(parseInt($("#qty_input").val()) + 1)
+    }
+
+    function minus(){
+        if ($("#qty_input").val() == 0){ return }
+        $("#qty_input").val(parseInt($("#qty_input").val()) - 1)
+    }
+
     function hideFormMateriale() {
         if ($("#new-materiale").val() == "certificato-collaudo") {
             console.log("form certificato di collaudo")
@@ -473,7 +513,7 @@
 
         hideFormMateriale();
         wipe();
-
+        $("#plusminus").removeClass("is-hidden");
     }
 
     function toggleHide(attr) {
