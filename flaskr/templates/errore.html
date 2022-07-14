@@ -1,0 +1,54 @@
+{% extends "layout/father.html" %}
+{% block title %} Si è verificato un errore! {% endblock %}
+
+{% block content %}
+<article class="message is-danger mb-3">
+    <div class="message-header">
+        <p>Si è verificato un errore.</p>
+    </div>
+    <div class="message-body">
+        <p><strong>Messaggio di errore: </strong>{{msg}}</p>
+    </div>
+</article>
+
+<div class="content">
+    <div class="title">
+        Domande frequenti
+    </div>
+    <p class="subtitle">
+        Cosa posso fare per risolvere?
+    </p>
+    <p>
+        Solitamente, se stai vedendo questa pagina, 
+        l'errore non è originato da te. Prima di contattare
+        gli amministratori di sistema, riprova, assicurandoti di seguire questi passi. 
+        <ul>
+            <li>
+                Esegui il <a href="{{url_for("login")}}">login</a>,
+            </li>
+            <li>
+                Assicurati di non utilizzare link che altri utenti ti hanno
+                inoltrato. Ad esempio, la pagina all'indirizzo 
+                {{ url_for("fornitori")}} non è disponibile ai fornitori di 
+                prodotti.
+            </li>
+        </ul>
+    </p>
+    <p class="subtitle">Devo contattare gli amministratori di sistema?</p>
+    <p>
+        Visualizzare spesso una schermata di errore può essere frustrante. 
+        Prima di contattare gli sviluppatori però, assicurati che il tuo errore
+        soddisfi questi requisiti:
+        <ul>
+            <li>
+                E' riproducibile, e viene scatenato sempre dallo 
+                stesso fenomeno,
+            </li>
+            <li>
+                È frequente e succede più volte a sessione,
+            </li>
+        </ul>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, nam voluptatum illo quam molestias nemo iure rerum debitis facilis possimus praesentium animi aliquid, quaerat corporis unde necessitatibus cupiditate. Velit, incidunt.
+    </p>
+</div>
+{% endblock %}

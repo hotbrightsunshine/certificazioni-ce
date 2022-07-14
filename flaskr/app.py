@@ -9,10 +9,16 @@ from articolo import Articolo
 from util import Util
 from user import User
 
+def user_type(session):
+    try:
+        return session['tipo']
+    except:
+        return False
+
 # Controlla che l'utente sia loggato
 def is_logged(session):
     try:
-        return session['login'] == 'ok'
+        return session['login'] == True
     except:
         return False
 
@@ -43,11 +49,18 @@ def login():
         return redirect(url_for("index"))
     elif request.method == "POST":
         if User.is_valid(request.form['username'], request.form['password']):
-            session['login'] = 'ok'
-            session['username'] = request.form['username']
-            session['certificazione'] = User.is_ce(session['username'])
-            session['saldatura'] = User.can_saldatura(session['username'])
-            return redirect(url_for("index"))
+            # Tipo: 'fornitore' o 'interno'
+            
+            username = request.form['username']
+            session['tipo'] = User.get_tipo(username)
+            session['login'] = True
+            session['username'] = username
+            session['certificazione'] = User.is_ce(username)
+            session['saldatura'] = User.can_saldatura(username)
+            if session.get("tipo") == 'fornitore':
+                return redirect(url_for("index"))
+            elif session.get("tipo") == 'interno':
+                return redirect(url_for("fornitori"))
     return render_template('login.html', fetched=fetched,  username=session.get('username'))
 
 
@@ -333,6 +346,50 @@ def delete_materiale(ddtnum:int, artnum:int, matnum:int):
         return redirect(url_for("login"))
     Articolo.delete_materiale(matnum)
     return redirect(url_for("articolo", artnum=artnum, ddtnum=ddtnum))
+
+## Fornitori
+@app.route("/utenti", methods=["GET", "POST"])
+def fornitori():
+    if (not is_logged(session)):
+        return redirect(url_for("login"))
+    #if (user_type(session) != "interno"):
+    #    return "Accesso non autorizzato. <a href='" + url_for('index') + "'>Home</a>"
+    
+    if request.method == "POST":
+        try:
+            DB.execute(f""" 
+            INSERT INTO testpython.cefusr0f (
+                ceusid, ceustipo,
+                ceustifo, ceusmail,
+                ceuspwd, ceusata ) 
+            VALUES (
+                '{request.form['codice']}', '{request.form['tipo']}',
+                '{request.form['normativa']}', '{request.form['email']}',
+                '{request.form['password']}', ' '
+            )
+        """)
+        except: 
+            return redirect(url_for("error"))
+    
+    print(user_type(session))
+    fornitori = DB.select_star("testpython.cefusr0f", "ceusata=' '")
+    return render_template("fornitori.html", fornitori = fornitori)
+
+
+@app.route("/utenti/delete/<usernum>")
+def delete_user(usernum):
+    if (not is_logged(session)):
+        return redirect(url_for("login"))
+    elif (user_type(session) != "interno"):
+        return redirect(url_for("error", msg = "L'accesso a questa pagina non è autorizzato."))
+    
+    DB.update_field("testpython.cefusr0f", 
+        "ceusata", "'r'", f"ceusid='{usernum}'")
+    return redirect(url_for("fornitori"))
+
+@app.route("/errore/<msg>", methods=["GET"])
+def error(msg):
+    return render_template("errore.html", msg = msg)
 
 ## Main
 if __name__ == '__main__':

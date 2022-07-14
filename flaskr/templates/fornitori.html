@@ -1,0 +1,91 @@
+{% extends "layout/father.html" %}
+{% block title %}Utenti{% endblock %}
+
+{% block content %}
+<div class="columns">
+    <div class="column">
+        <div class="box">
+            <form method="post">
+                <div class="subtitle">
+                    Inserisci un nuovo utente
+                </div>
+                <div class="field">
+                    <label for="" class="label">Codice</label>
+                    <input type="text" name="codice" class="input">
+                </div>
+                <div class="field">
+                    <label for="" class="label">Password</label>
+                    <input type="text" name="password" class="input">
+                </div>
+                <div class="field">
+                    <label for="" class="label">E-mail</label>
+                    <input type="text" name="email" class="input">
+                </div>
+
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label for="" class="label">Normativa</label>
+                            <div class="select is-fullwidth">
+                                <select name="normativa">
+                                    <option value=" ">Nessuna</option>
+                                    <option value="C">CE</option>
+                                    <option value="F">Non CE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+
+                        <div class="field">
+                            <label for="" class="label">Tipo di utente</label>
+                            <div class="select is-fullwidth">
+                                <select name="tipo">
+                                    <option value="S">Interno</option>
+                                    <option value="F">Fornitore</option>
+                                    <option value="R">Ricevimento</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button class="button is-primary is-fullwidth" type="submit">Salva</button>
+            </form>
+        </div>
+    </div>
+    {% if fornitori|length > 0 %}
+    <div class="column">
+        {% for forn in fornitori %}
+        <div class="box">
+            {% if forn['CEUSTIPO'] == 'F' %}
+            <div class="subtitle">Fornitore</div>
+            {% elif forn['CEUSTIPO'] == 'S' %}
+            <div class="subtitle">Utente Interno</div>
+            {% elif forn['CEUSTIPO'] == 'R' %}
+            <div class="subtitle">Ricevimento merci</div>
+            {% else %}
+            <div class="subtitle">Tipo indefinito</div>
+            {% endif %}
+            <p><strong>Username: </strong>{{forn['CEUSID']}}</p>
+            <p><strong>E-mail:</strong> {{forn['CEUSMAIL']}}</p>
+            <p><strong>Password: </strong>{{forn['CEUSPWD']}}</p>
+            <p><strong>Tipo di certificazione: </strong>
+                {% if forn['CEUSTIFO'] == 'F' %}
+                Standard
+                {% elif forn['CEUSTIFO'] == 'C' %}
+                CE
+                {% else %}
+                Nessuna
+                {% endif %}
+            </p>
+            <a href="{{url_for('delete_user', usernum = forn['CEUSID'])}}"
+             class="button is-danger">Elimina</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

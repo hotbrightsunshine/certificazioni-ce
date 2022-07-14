@@ -3,7 +3,7 @@ from db import DB
 class User:
     # Controlla che le credenziali di accesso siano valide 
     def is_valid(name:str, passw:str):
-        f = DB.select_star("testpython.cefusr0f", f"ceusid='{name}' AND ceuspwd='{passw}'")
+        f = DB.select_star("testpython.cefusr0f", f"ceusid='{name}' AND ceuspwd='{passw}' AND ceusata=' '")
         return len(f) >= 1
 
     # Controlla se il fornitore è CE
@@ -32,5 +32,14 @@ class User:
             return (len(User.get_soggetti_of_user(username)) > 0) and (len(User.get_equipaggiamenti_of_user(username)) > 0)
         except:
             return False
+
+    def get_tipo(username:str):
+        u = DB.select_star("testpython.cefusr0f", f"ceusid='{username}'")
+        if u[0]['CEUSTIPO'] == 'F':
+            return 'fornitore'
+        elif u[0]['CEUSTIPO'] == 'S':
+            return 'interno'
+        else:
+            return 'ricevimento'
 
 
