@@ -19,8 +19,8 @@
 ** Come continuare il progetto
   Esistono diversi modi per continuare o partecipare allo sviluppo del progetto.
   In particolare,
-  + è possibile [[https://docs.github.com/en/get-started/quickstart/fork-a-repo][eseguire un /fork/ del progetto]], continuarlo, e poi [[https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests][creare una /pull request/]] per unire il tuo con il sorgente "ufficiale" (consigliato),
-  + è possibile [[https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository][clonare il repository]], lavorare sul progetto, e [[https://github.com/git-guides/git-pull][eseguire un /pull/]] delle modifiche (se si possiedono i permessi necessari),
+  + è possibile [[https://docs.github.com/en/get-started/quickstart/fork-a-repo][eseguire un fork del progetto]], continuarlo, e poi [[https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests][creare una pull request]] per unire il tuo con il sorgente "ufficiale" (consigliato),
+  + è possibile [[https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository][clonare il repository]], lavorare sul progetto, e [[https://github.com/git-guides/git-pull][eseguire un pull]] delle modifiche (se si possiedono i permessi necessari),
   + è possibile scaricare il repository e continuarlo in locale, senza contribuire a questo progetto. 
   Nel caso avvenga la terza opzione, questo repository non verrà mantenuto, e sarà archiviato.
 
