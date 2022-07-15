@@ -18,12 +18,12 @@
             {{ self.title() }}
           </h1>
           <h1 class="subtitle">
-            {% if self.title() == "I tuoi DDT" %}
+            {% if self.title() == "Menu principale" %}
             {% if login %}
             Esegui il <a href="{{url_for('logout')}}">logout</a>
             {% endif %}
             {% else %}
-            Torna ai <a href="{{url_for('index')}}">tuoi DDT</a>
+            Torna al <a href="{{url_for('index')}}">Menu pcincipale</a>
             {%endif%}
             
           </h1>

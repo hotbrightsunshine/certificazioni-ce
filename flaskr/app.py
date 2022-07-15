@@ -375,7 +375,7 @@ def fornitori():
     fornitori = DB.select_star("testpython.cefusr0f", "ceusata=' '")
     return render_template("fornitori.html", fornitori = fornitori)
 
-
+# Elimina un utente
 @app.route("/utenti/delete/<usernum>")
 def delete_user(usernum):
     if (not is_logged(session)):
@@ -387,6 +387,7 @@ def delete_user(usernum):
         "ceusata", "'r'", f"ceusid='{usernum}'")
     return redirect(url_for("fornitori"))
 
+# Schermata di errore
 @app.route("/errore/<msg>", methods=["GET"])
 def error(msg):
     return render_template("errore.html", msg = msg)
